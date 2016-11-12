@@ -14,8 +14,7 @@ class CreateExamTable extends Migration
     public function up()
     {
         Schema::create('exams', function (Blueprint $table) {
-            $table->integer('reservation_id')->unsigned();
-            $table->foreign('reservation_id')->references('id')->on('reservations');
+            $table->increments('id');
             $table->string('section', 10);
             $table->string('subject', 10);
             $table->timestamps();
