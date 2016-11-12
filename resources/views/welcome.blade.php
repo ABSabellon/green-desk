@@ -131,7 +131,7 @@
 					</div>
 					<div class="modal-footer">
 					
-						<button type="button" class="btn btn-default button" data-dismiss="modal" onclick="refreshReservations()">Done</button>
+						<button type="button" class="btn btn-default button" data-dismiss="modal" onclick="addReservation()">Done</button>
 						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
 
 					</div>
@@ -240,30 +240,6 @@
 					<!-- -----------RESERVATION ITEM LIST---------- -->
 					<ul class="nav nav-pills nav-stacked resList" id="reservationList">
 						<!-- -----------RESERVATION ITEMS---------- -->
-						<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">EventName</div>
-							<div class = "col-md-6 resItemType">EventType</div></div>
-							<div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">1000-1045</p>
-								<p class = "resItemPerson">by Reservee</p></div></div></a>
-						</li>
-
-						<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">EventName</div>
-							<div class = "col-md-6 resItemType">EventType</div></div>
-							<div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">1000-1045</p>
-								<p class = "resItemPerson">by Reservee</p></div></div></a>
-						</li>
-
-						<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">EventName</div>
-							<div class = "col-md-6 resItemType">EventType</div></div>
-							<div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">1000-1045</p>
-								<p class = "resItemPerson">by Reservee</p></div></div></a>
-						</li>
-
-						<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">EventName</div>
-							<div class = "col-md-6 resItemType">EventType</div></div>
-							<div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">1000-1045</p>
-								<p class = "resItemPerson">by Reservee</p></div></div></a>
-						</li>
-
 					</ul>
 				</div>
 				<button type="button" class="btn btn-block" id = "AddBtn" data-toggle="modal" data-target="#addModal"><div class = "row eListItemHead">Add Reservation</button></div>
@@ -285,6 +261,7 @@
 	$(document).ready(function(){
 		$('.div-toggle').trigger('change');
 		refreshRooms();
+		refreshReservations();
 	});
 
 	function getSelectedRoom(roomName) {
@@ -295,8 +272,9 @@
 
 <script type="text/javascript">
 	var urlAdd = "{{ route('add.reservation') }}";
+	var urlGetReservations = "{{ route('get.reservations') }}";
 
-	function refreshReservations(){
+	function addReservation(){
 		var date = $('#datepicker').val();
 		var sTime = $('#timeStart').val();
 		var eTime = $('#timeEnd').val();
@@ -328,18 +306,30 @@
 				section:section, subject:subject, date:date, room:selectedRoom}
 		})
 		.done( function(msg) {
+			refreshReservations();
+		});
+	}
+
+	function refreshReservations() {
+		$.ajax({
+			method: 'GET',
+			url: urlGetReservations,
+			data: {token: token}
+		})
+		.done( function(msg) {
 			var resList = $('#reservationList');
 			resList.empty();
-			for (var i = 0; i < msg.length; i++) {
+			for (var i = 0; i < msg['reservations'].length; i++) {
+				var type = (msg['reservations'][i].exam_id == null) ? 'Grade Consultation':'Exam';
 				resList.append(
 					'<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">'+
-					msg[i].name
+					msg['reservations'][i].name
 					+'</div><div class = "col-md-6 resItemType">'+
-					msg[i].type
+					type
 					+'</div></div><div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">'+
-					msg[i].time
+					msg['reservations'][i].time_start + '-' + msg['reservations'][i].time_end
 					+'</p><p class = "resItemPerson">by '+
-					msg[i].reservation
+					msg['reservees'][i]
 					+'</p></div></div></a></li>'
 				)
 			}
