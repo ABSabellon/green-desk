@@ -13,13 +13,12 @@ class CreateReserveeTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservee', function (Blueprint $table) {
+        Schema::create('reservees', function (Blueprint $table) {
             $table->increments('id');
             $table->string('first_name', 100);
             $table->string('last_name', 100);
             $table->string('middle_name', 100);
-            $table->string('reservee_type', 10); //STUDENT/PROFESSOR
-            $table->string('professor_status', 20); //FULLTIME/PARTTIME
+            $table->string('reservee_type', 20); //STUDENT/FULLTIME-PROF/PARTTIME-PROF/STAFF/OTHERS
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateReserveeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservee');
+        Schema::dropIfExists('reservees');
     }
 }
