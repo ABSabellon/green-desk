@@ -16,6 +16,10 @@ class Reservation extends Model
     }
 
     public function reservee() {
-    	return $this->hasOne('App/Reservee')
+    	return $this->hasOne('App/Reservee');
+    }
+
+    public function exam() {
+        return $this->hasOne('App/Exam');
     }
 }
