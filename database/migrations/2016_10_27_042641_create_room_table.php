@@ -13,12 +13,13 @@ class CreateRoomTable extends Migration
      */
     public function up()
     {
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('room_no', 10);
             $table->integer('floor');
-            $table->integer('roomtype_id')->unsigned();
-            $table->foreign('roomtype_id')->references('id')->on('roomtype');
+            $table->string('room_type', 20);
+            // $table->integer('roomtype_id')->unsigned();
+            // $table->foreign('roomtype_id')->references('id')->on('roomtype');
             $table->boolean('available')->default(true);
             $table->timestamps();
         });
@@ -31,6 +32,6 @@ class CreateRoomTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('room');
+        Schema::dropIfExists('rooms');
     }
 }
