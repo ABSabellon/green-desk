@@ -65,6 +65,11 @@ class RouteServiceProvider extends ServiceProvider
                 'as' => 'add.reservation'
             ]);
 
+            Route::get('/get_reservations', [
+                'uses' => 'ReservationController@getReservations',
+                'as' => 'get.reservations'
+            ]);
+
             Route::get('/get_rooms', [
                 'uses' => 'RoomController@getRooms',
                 'as' => 'get.rooms'
