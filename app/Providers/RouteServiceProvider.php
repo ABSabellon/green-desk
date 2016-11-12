@@ -57,6 +57,21 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require base_path('routes/web.php');
         });
+
+        Route::group(['namespace' => $this->namespace], function () {
+
+            Route::post('/add_reservation', [
+                'uses' => 'ReservationController@postAddReservation',
+                'as' => 'add.reservation'
+            ]);
+
+            Route::get('/get_rooms', [
+                'uses' => 'RoomController@getRooms',
+                'as' => 'get.rooms'
+            ]);
+        });
+
+        
     }
 
     /**
