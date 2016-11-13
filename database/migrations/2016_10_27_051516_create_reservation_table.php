@@ -24,6 +24,7 @@ class CreateReservationTable extends Migration
             $table->time('time_start');
             $table->time('time_end');
             $table->string('status', 10); //create table?
+            $table->string('comment', 500);
             $table->boolean('archived')->default(false); //create table?
             $table->timestamps();
         });
