@@ -60,10 +60,14 @@ class ReservationController extends Controller
 
     }
 
-    public function getReservations() {
-        $reservations = Reservation::all();
-        $reservees = array();
+    public function getReservations(Request $request) {
+        if($request['filter'] == null) {
+            $reservations = Reservation::all();  
+        } else {
+            $reservations = Reservation::where('date', $request['filter'])->get();
+        }
 
+        $reservees = array();
         foreach ($reservations as $reservation) {
             $reservee = Reservee::find($reservation->reservee_id);
             $reservees[] = $reservee->first_name . ' ' . $reservee->last_name;
