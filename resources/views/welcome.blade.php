@@ -4,6 +4,8 @@
 	<title>
 		Green Desk
 	</title>
+	<!-- Token used to verify ajax requests -->
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="{{ URL::to('utils/bootstrap-3.3.6-dist/css/bootstrap.min.css') }}">
 	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
@@ -162,12 +164,11 @@
 	<div class="row">
 		<!-- -----------FLOORS---------- -->
 		<div class="col-md-3 firstRow" id="floorsDiv">
-			<select>
-				<option value="B">Basement</option>
-				<option value="G">Ground</option>
+			<select id = "floors" onchange="retrieveRoomsByFloor();">
+				<option value="1">Ground</option>
 				<option value="2">Second Floor</option>
 				<option value="3">Third Floor</option>
-				<option value="4">Fourth Floor</option>
+				<option selected = "true" value="4">Fourth Floor</option>
 				<option value="5">Fifth Floor</option>
 			</select>
 		</div>
@@ -175,7 +176,7 @@
 		<div class="col-md-6 firstRow" id="roomFilterDiv">
 			<select class = "div-toggle" data-target=".view">
 				<option value="building"	data-show=".building_view">Building View</option>
-				<option value="list"		data-show=".list_view">List View</option>
+				<option selected = "true" value="list"		data-show=".list_view">List View</option>
 			</select>
 		</div>
 		<!-- -----------RESERVATION_FILTERS---------- -->
@@ -187,20 +188,24 @@
 	<div class="row">
 		<!-- -----------CALENDAR---------- -->
 		<div class="col-md-3 secondRow" id="calendarDiv">
-			
+			<div id="datepicker"></div>
 			<script type="text/javascript">
 				$( function() {
 					$( "#datepicker,#defaultPopup,#defaultInline" ).datepicker({
 						dateFormat: "yy-mm-dd",
-						yearRange: "-100:+0",
+						yearRange: "-0:+10",
 						showOtherMonths: true,
 						changeMonth: true,
-						changeYear: true
+						changeYear: true,
+						onSelect: function() { 
+					        retrieveReservations($('#datepicker').val());
+						}
 					});
 					$( "#datepicker" ).datepicker( "option", "showAnim", "slideDown" );
 				} );
+
+				
 			</script>
-			<div id="datepicker"></div>
 		</div>
 		<div class="view">
 			<!-- -----------ROOM_LIST---------- -->
@@ -208,21 +213,15 @@
 				<!-- -----------ROOM LIST HEADER---------- -->
 				<div class="row" id="roomListHeader">Rooms:</div>
 				<!-- -----------ROOM LIST BODY---------- -->
-				<div><input type="search" placeholder="Search Room" class = "searchBar"></textarea></div>
+				<div><input id = "searchRoom" type="search" placeholder="Search Room" class = "searchBar"></textarea></div>
 				<div id="rmListDiv">
 					<ul class="nav nav-pills nav-stacked roomList" id="room_list">
-						<li class="roomListItem"><a id = "MRW304" href = "#" onclick = "getSelectedRoom(this.id);"><div class = "roomName">MRW403</div><div class = "roomType">classroom</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW404</div><div class = "roomType">classroom</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW410</div><div class = "roomType">dance room</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW411</div><div class = "roomType">classroom</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW412</div><div class = "roomType">classroom</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW413</div><div class = "roomType">classroom</div></a></li>
-						<li class="roomListItem"><a href = "#"><div class = "roomName">MRW414</div><div class = "roomType">classroom</div></a></li>
+						
 					</ul>
 				</div>
 			</div>
 			<div class="col-md-6 secondRow building_view hide">
-				<img src = "MDR.png" style="max-width:100%; max-height:100%;"> 
+				<img src = "{{ URL::to('images/MDR.png') }}" style="max-width:100%; max-height:100%;"> 
 				</div>
 
 			</div>
@@ -234,7 +233,7 @@
 						Reservations
 					</p>
 				</div>
-				<div><input type="search" placeholder="Search Reservation" class = "row searchBar" style = "margin-left: 1px;"></input></div>
+				<div><input id = "searchReservation" type="search" placeholder="Search Reservation" class = "row searchBar" style = "margin-left: 1px;"></input></div>
 				<div id = "resBody">
 
 					<!-- -----------RESERVATION ITEM LIST---------- -->
@@ -259,9 +258,15 @@
 		$(show).removeClass('hide');
 	});
 	$(document).ready(function(){
+		$.ajaxSetup({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        }
+	    });
 		$('.div-toggle').trigger('change');
-		refreshRooms();
-		refreshReservations();
+		retrieveRooms();
+		retrieveRoomsByFloor();
+		retrieveReservations($('#datepicker').val());
 	});
 
 	function getSelectedRoom(roomName) {
@@ -297,74 +302,140 @@
 			var subject = null;
 			var section = null;
 		}
+		console.log(urlAdd);
 
 		$.ajax({
 			method: 'POST',
 			url: urlAdd,
-			data: {token: token, startTime: sTime, endTime: eTime, firstName:firstName, lastName:lastName, patron:patron, 
+			data: {startTime: sTime, endTime: eTime, firstName:firstName, lastName:lastName, patron:patron, 
 				eventName:eventName, description:description, notes:notes, isExam:is_Exam, eventType:eventType, examType:examType, 
 				section:section, subject:subject, date:date, room:selectedRoom}
 		})
 		.done( function(msg) {
-			refreshReservations();
+			retrieveReservations($('#datepicker').val());
 		});
 	}
 
-	function refreshReservations() {
+	function retrieveReservations(filter) {
 		$.ajax({
 			method: 'GET',
 			url: urlGetReservations,
-			data: {token: token}
+			data: {token: token, filter:filter}
 		})
 		.done( function(msg) {
-			var resList = $('#reservationList');
-			resList.empty();
-			for (var i = 0; i < msg['reservations'].length; i++) {
-				var type = (msg['reservations'][i].exam_id == null) ? 'Grade Consultation':'Exam';
-				resList.append(
-					'<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">'+
-					msg['reservations'][i].name
-					+'</div><div class = "col-md-6 resItemType">'+
-					type
-					+'</div></div><div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">'+
-					msg['reservations'][i].time_start + '-' + msg['reservations'][i].time_end
-					+'</p><p class = "resItemPerson">by '+
-					msg['reservees'][i]
-					+'</p></div></div></a></li>'
-				)
-			}
+			refreshReservations(msg.reservations, msg.reservees);
 		});
+	}
+
+	function refreshReservations(reservations, reservees) {
+		var resList = $('#reservationList');
+		resList.empty();
+		for (var i = 0; i < reservations.length; i++) {
+			var type = (reservations[i].exam_id == null) ? 'Grade Consultation':'Exam';
+			resList.append(
+				'<li class="eListItem"><a data-toggle="modal" data-target="#resModal"><div class = "row eListItemHead"><div class = "col-md-6 resItemName">'+
+				reservations[i].name
+				+'</div><div class = "col-md-6 resItemType">'+
+				type
+				+'</div></div><div class="row eListItemBody"><div class="col-md-12"><p class = "resItemTime">'+
+				reservations[i].time_start + '-' + reservations[i].time_end
+				+'</p><p class = "resItemPerson">by '+
+				reservees[i]
+				+'</p></div></div></a></li>'
+			)
+		}
 	}
 
 </script>
 
 <script type="text/javascript">
-	var urlGetRooms = "{{ route('get.rooms') }}"
+	var urlGetRooms = "{{ route('get.rooms') }}";
+	var urlGetRoomsByFloor = "{{ route('get.rooms.floor') }}";
 
-	function refreshRooms(){
+	function retrieveRooms(){
 		$.ajax({
 			method: 'GET',
-			url: urlGetRooms + '?_token=' + token,
+			url: urlGetRooms,
 			data: {}
 		})
 		.done( function(msg) {
-			var roomList = $('#room_list');
-			$('#room_list').empty();
-			for (var i = 0; i < msg.rooms.length; i++) {
-				roomList.append(
-					'<li class="roomListItem"><a id = "'+ msg.rooms[i].room_no +'" href = "#" onclick = "getSelectedRoom(this.id);"> '+
-					'<div class = "roomName">'+
-					msg.rooms[i].room_no
-					+'</div><div class = "roomType">'+
-					msg.rooms[i].room_type
-					+'</div></a></li>'
-				)
-			}
+			refreshRooms(msg.rooms)
 		});
 	}
 
+	function retrieveRoomsByFloor() {
+		var floor = $('#floors').val();
+		$.ajax({
+			method: 'GET',
+			url: urlGetRoomsByFloor,
+			data: {floor:floor}
+		})
+		.done( function(msg) {
+			refreshRooms(msg.rooms)
+		});
+	}
+
+	function refreshRooms(rooms) {
+		var roomList = $('#room_list');
+		$('#room_list').empty();
+		for (var i = 0; i < rooms.length; i++) {
+			roomList.append(
+				'<li class="roomListItem"><a id = "'+ rooms[i].room_no +'" href = "#" onclick = "getSelectedRoom(this.id);"> '+
+				'<div class = "roomName">'+
+				rooms[i].room_no
+				+'</div><div class = "roomType">'+
+				rooms[i].room_type
+				+'</div></a></li>'
+			)
+		}
+	}
+
+</script>
+
+<script type="text/javascript">
+	var urlSearchRooms = "{{ route('search.rooms') }}";
+	var searchRoomTerm;
+
+	function searchRoomResults() {
+		$.ajax({
+			method: 'GET',
+			url: urlSearchRooms,
+			data: {term:searchRoomTerm}
+		})
+		.done( function(msg) {
+			refreshRooms(msg.rooms);
+		});
+	}
+	
+	$('#searchRoom').keyup(function(event) {
+		searchRoomTerm = event.target.value;
+		searchRoomResults();
+	});
+
 </script>
 								
-								
+<script type="text/javascript">
+	var urlSearchReservationss = "{{ route('search.reservations') }}";
+	var searchReservationTerm;
+
+	function searchReservationResults() {
+		$.ajax({
+			method: 'GET',
+			url: urlSearchReservationss,
+			data: {term:searchReservationTerm}
+		})
+		.done( function(msg) {
+			refreshReservations(msg.reservations, msg.reservees);
+		});
+	}
+	
+	$('#searchReservation').keyup(function(event) {
+		searchReservationTerm = event.target.value;
+		searchReservationResults();
+	});
+
+	
+
+</script>					
 								
 								
