@@ -57,7 +57,7 @@
 									<option>GCOE</option>
 									<option>COS</option>
 									<option>RVCOB</option>
-									<option">CLA</option>
+									<option>CLA</option>
 									<option>COED</option>
 									<option>SOE</option>
 									</select>
@@ -122,42 +122,46 @@
 	</div>
 
 	<!-- ----------MAIN CONTAINER----------- -->
-	<div class="container">
-		<!-- ----------TOOLBAR---------- -->
+	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12" id = "toolbar">
-				<ul class="nav nav-pills">
-				<!--
-					<li><a data-toggle="modal" data-target="#diceModal" class = "toolBarItem"></a></li>
-					<li><a data-toggle="modal" data-target="#loreModal" class = "toolBarItem">Lore</a></li>
-					<li><a href="LobbyProf.html" href="#" class = "toolBarItem" onClick = "leaveMsg()">Leave</a></li> 
-				-->
-			</ul>
-			<p id = "toolTitle">
-				Green Desk
-			</p>
-			</div>
+			<!-- ----------TOOLBAR---------- -->
+			<nav class="navbar navbar-default" id = "toolbar">
+	            <div class="container-fluid">
+	                <div class="navbar-header">
+	                    <a class="navbar-brand" href="/" id="toolTitle">
+	                        Green Desk
+	                    </a>
+	                </div>
+	                <div id="navbar" class="navbar-collapse collapse">
+	                    {{-- <ul class="nav navbar-nav">
+	                        <li><a href="#">Airsoft Store</a></li>
+	                        <li><a href="#">Game Sites</a></li>
+	                    </ul> --}}
+	                </div><!--/.nav-collapse -->
+	            </div><!--/.container-fluid -->
+	        </nav>
 		</div>
+	</div>
+	<div class="container">
 		<!-- ----------FIRST ROW---------- -->
-			<div class="row" id="firstRow">
+		<div class="row" id="firstRow">
 			&nbsp
-			</div>
+		</div>
 		<!-- ----------SECOND ROW---------- -->
-			<div class="row" id="firstRow">
-				<div class = "col-xs-4">
-				</div>
-				<div class = "col-xs-8">
-					<p style = "margin-left: -40px;">
-						<input type="search" placeholder="Search Professor" class = "searchBar"></textarea>
-						Filter by: 
-						<select>
-							<option value = "prof">professor</option>
-							<option value = "time">time</option>
-							<option value = "room">room</option>
-						</select>
-					</p>
-				</div>
-			</div>
+		<div class="row" id="firstRow">
+			<div class = "col-xs-4">
+		</div>
+		<div class = "col-xs-8">
+			<p style = "margin-left: -40px;">
+				<input type="search" placeholder="Search Professor" class = "searchBar" />
+				Filter by: 
+				<select>
+					<option value = "prof">professor</option>
+					<option value = "time">time</option>
+					<option value = "room">room</option>
+				</select>
+			</p>
+		</div>
 		<!-- ----------THIRD ROW---------- -->
 		<div class="row" id="thirdRow">
 			<!-- ----------SCHED TABLE CONTROL PANEL COL---------- -->
