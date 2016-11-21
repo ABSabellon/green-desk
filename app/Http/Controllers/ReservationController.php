@@ -13,71 +13,93 @@ class ReservationController extends Controller
 {
     //
     public function postAddReservation(Request $request) {
-    	$reservation = new Reservation();
-        $reservee = Reservee::where('first_name', $request['firstName'])
-                            ->where('last_name', $request['lastName'])->first();
+    	$reservation = Reservation::find($request['index']);
+        $room = Room::where('room_no', $request['room']);
 
-        if($reservee == null) {
-            $reservee = new Reservee();
-            $reservee->first_name = $request['firstName'];
-            $reservee->middle_name = "Middle";
-            $reservee->last_name = $request['lastName'];
-            $reservee->reservee_type = $request['patron'];
-            $reservee->save();
-        }
+        $reservation->time_start = $request['startTime'];
+        $reservation->time_end = $request['endTime'];
+        $reservation->room_id = $room->id;
 
-        $room = Room::where('room_no', $request['room'])->first();
-    	$reservation->room_id = $room->id;
-        $reservation->reservee_id = $reservee->id;
+        $reservation->save();
 
-    	$reservation->name = $request['eventName'];
-    	$reservation->description = $request['description'];
-    	$reservation->status = 'ONGOING'; //default status
-    	$reservation->archived = 0;
+     //    $reservee = Reservee::where('first_name', $request['firstName'])
+     //                        ->where('last_name', $request['lastName'])->first();
 
-        $date = date_create($request['date']);
-        $reservation->date = $date;
+     //    if($reservee == null) {
+     //        $reservee = new Reservee();
+     //        $reservee->first_name = $request['firstName'];
+     //        $reservee->middle_name = "Middle";
+     //        $reservee->last_name = $request['lastName'];
+     //        $reservee->reservee_type = $request['patron'];
+     //        $reservee->save();
+     //    }
 
-        $times = explode(':', $request['startTime']);
-        date_time_set($date, $times[0], $times[1]);
-        $reservation->time_start = $date;
+     //    $room = Room::where('room_no', $request['room'])->first();
+    	// $reservation->room_id = $room->id;
+     //    $reservation->reservee_id = $reservee->id;
 
-        $temp = clone $date;
+    	// $reservation->name = $request['eventName'];
+    	// $reservation->description = $request['description'];
+    	// $reservation->status = 'ONGOING'; //default status
+    	// $reservation->archived = 0;
 
-        $times = explode(':', $request['endTime']);
-        date_time_set($temp, $times[0], $times[1]);
-        $reservation->time_end = $temp;
+     //    $date = date_create($request['date']);
+     //    $reservation->date = $date;
 
-        if($request['isExam'] == 'true') {
-            $exam = new Exam();
-            $exam->subject = $request['subject'];
-            $exam->section = $request['section'];
-            $exam->save();
-            $reservation->exam_id = $exam->id;
-        }
+     //    $times = explode(':', $request['startTime']);
+     //    date_time_set($date, $times[0], $times[1]);
+     //    $reservation->time_start = $date;
 
-    	$reservation->save();
+     //    $temp = clone $date;
+
+     //    $times = explode(':', $request['endTime']);
+     //    date_time_set($temp, $times[0], $times[1]);
+     //    $reservation->time_end = $temp;
+
+     //    if($request['isExam'] == 'true') {
+     //        $exam = new Exam();
+     //        $exam->subject = $request['subject'];
+     //        $exam->section = $request['section'];
+     //        $exam->save();
+     //        $reservation->exam_id = $exam->id;
+     //    }
+
+    	// $reservation->save();
 
     }
 
-    public function getReservations() {
-        $reservations = Reservation::all();
-        $reservees = array();
+    public function getReservations(Request $request) {
+        if($request['filter'] == null) {
+            $reservations = Reservation::all();  
+        } else {
+            $reservations = Reservation::where('date', $request['filter'])->get();
+        }
 
+        $reservees = array();
         foreach ($reservations as $reservation) {
             $reservee = Reservee::find($reservation->reservee_id);
-            $reservees[] = $reservee->first_name . ' ' . $reservee->last_name;
+            $reservees[] = $reservee;
+            if($reservation->room_id == null) {
+                $rooms[] = "";
+            } else {
+                $room = Room::find($reservation->room_id);
+                $rooms[] = $room->room_no;
+            }
         }
 
-        return response()->json(['reservations' => $reservations, 'reservees' => $reservees], 200);
+        return response()->json(['reservations' => $reservations, 'reservees' => $reservees, 'rooms' => $rooms], 200);
     }
 
-    public function getReservationByDate(Request $request) {
-    	$date = $request['date'];
+    public function postEditReservation(Request $request) {
+        $reservation = Reservation::find($request['index']);
+        $room = Room::where('room_no', $request['room'])->first();
 
-    	$reservations = Reservation::where('date', $date)->get();
+        $reservation->time_start = $request['startTime'];
+        $reservation->time_end = $request['endTime'];
+        $reservation->room_id = $room->id;
 
-    	return response()->json(['reservations' => $reservations], 200);
+        $reservation->save();
+
     }
 
     public function getReservationByReservee(Request $request) {
