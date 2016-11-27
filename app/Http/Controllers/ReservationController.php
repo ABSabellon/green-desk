@@ -117,5 +117,17 @@ class ReservationController extends Controller
     	$reservations = Reservation::where('');
     }
 
+    public function export(){
+        $data = Reservation::all()->toArray();
+        $path = public_path() . '/export.csv';
+        $out = fopen($path, 'w');
+        fputcsv($out, array_keys($data[1]));
+        foreach($data as $line)
+        {
+            fputcsv($out, $line);
+        }
+        fclose($out);
 
+        return response()->download($path);
+    }
 }
