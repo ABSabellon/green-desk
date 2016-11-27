@@ -90,9 +90,36 @@ class ReservationController extends Controller
         return response()->json(['reservations' => $reservations, 'reservees' => $reservees, 'rooms' => $rooms], 200);
     }
 
-    public function postEditReservation(Request $request) {
+   public function postEditReservation(Request $request) {
         $reservation = Reservation::find($request['index']);
         $room = Room::where('room_no', $request['room'])->first();
+
+        $reservations = Reservation::all();
+
+        foreach ($reservations as $res) {
+            $start_ts = $res->time_start;
+            $end_ts = $res->time_end;
+
+            if($this->checkConflict($start_ts, $end_ts, $request['startTime']) != null) {
+                Log::info('conflict in start time');
+                $prof = Reservee::find($res->reservee_id);
+                $profName = $prof->first_name . ' ' . $prof->last_name;
+                return response()->json(['name' => $profName], 200);
+            }
+
+            if($this->checkConflict($start_ts, $end_ts, $request['endTime']) != null) {
+                Log::info('conflict in end time');
+                $prof = Reservee::find($res->reservee_id);
+                $profName = $prof->first_name . ' ' . $prof->last_name;
+                return response()->json(['name' => $profName], 200);
+            }
+
+        }
+
+        // if($conflict == null)
+        //     Log::info('good2go');
+        // else
+        //     Log::info('conflict!');
 
         $reservation->time_start = $request['startTime'];
         $reservation->time_end = $request['endTime'];
@@ -100,6 +127,10 @@ class ReservationController extends Controller
 
         $reservation->save();
 
+    }
+
+    private function checkConflict($start_range, $end_range, $user_time) {
+        return (($user_time >= $start_range) && ($user_time <= $end_range));
     }
 
     public function getReservationByReservee(Request $request) {
