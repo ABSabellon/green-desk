@@ -66,6 +66,10 @@ ul{
   	background-color: #006535;
   	border-color: #285e8e;
 }
+.btn-primary:hover {
+    background-color: white;
+    color: #006535;
+}
 
  .modalHeadStyle{
 	background-color: #006535;
@@ -163,7 +167,7 @@ ul{
 	border-radius:  0px 5px 5px 0px;
 	max-width: 100%;
 	width: 70%;
-	height:400px;
+	height:650px;
 	
 }
 
@@ -180,7 +184,7 @@ ul{
 	border-width: 3px;
 	border-radius: 12px;
 	border-color: #006535;
-	height: 90%;
+	height: 95%;
 	width: 100%;
 	overflow-y: scroll;
 }
