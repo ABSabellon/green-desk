@@ -61,6 +61,12 @@ ul{
     transition-duration: 0.4s;
 }
 
+.btn-primary{
+	color: #ffffff;
+  	background-color: #006535;
+  	border-color: #285e8e;
+}
+
  .modalHeadStyle{
 	background-color: #006535;
 	color: white;
