@@ -152,9 +152,9 @@
 			</div>
 			<div class = "col-xs-8">
 				<p style = "margin-left: -40px;">
-					<input type="search" placeholder="Search Professor" class = "searchBar" />
+					<input id = "searchRes" type="search" placeholder="Search Professor" class = "searchBar" />
 					Filter by: 
-					<select>
+					<select id = "filterSearch">
 						<option value = "prof">professor</option>
 						<option value = "time">time</option>
 						<option value = "room">room</option>
@@ -365,6 +365,10 @@
 			data: {index: resIndex+1, startTime:startTime, endTime: endTime, room:room}
 		})
 		.done( function(msg) {
+			if(msg.name != null) {
+				$('#inputWarning').text('Conflict with ' + msg.name +'!');
+				$('#inputWarning').show();
+			}
 			// var rows = $('tr', '#schedTable');
 			// var timeTd = rows.eq(resIndex+1).find('td').eq(1);
 			// var roomTd = rows.eq(resIndex+1).find('td').eq(2);
@@ -429,6 +433,28 @@
 		.done( function(msg) {
 			retrieveProfessors(null);
 			retrieveReservations(null);
+		});
+	}
+	
+	var filter = 'prof';
+
+	$('#filterSearch').on('change', function() {
+		filter = $('#filterSearch').val();
+	});
+
+	$('#searchRes').keyup(function(event) {
+		searchResTerm = event.target.value;
+		searchReservations();
+	});
+
+	function searchReservations() {
+		$.ajax({
+			method: 'GET',
+			url: urlSearchReservations,
+			data: {term:searchResTerm, filter:filter}
+		})
+		.done( function(msg) {
+			refreshReservations(msg.reservations, msg.reservees, msg.rooms);
 		});
 	}
 
