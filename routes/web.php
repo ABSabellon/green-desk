@@ -50,6 +50,11 @@ Route::get('/search_reservations', [
     'as' => 'search.reservations'
 ]);
 
+// Route::get('/search_professors', [
+//     'uses' => 'SearchController@getProfessors',
+//     'as' => 'search.prof'
+// ]);
+
 Route::get('/get_professors', [
     'uses' => 'ReserveeController@getProfessors',
     'as' => 'get.professors'
@@ -59,5 +64,3 @@ Route::post('/add_professor', [
     'uses' => 'ReserveeController@postAddProfessor',
     'as' => 'add.professor'
 ]);
-
-Route::get('/export', ['uses' => 'ReservationController@export', 'as' => 'export']);
