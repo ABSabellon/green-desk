@@ -189,12 +189,10 @@
 							
 						</select>
 					</p>
+					<span style = "color:red" id = "inputWarning">Warning!</span>
 					<button id = "editBtn" class="button">Edit</button>
 				</div>
 
-				<div id = "inputWarning" class="alert alert-warning">
-					<strong>Warning!</strong>
-				</div>
 
 				<div id = "schedCtrlFooter">
 					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
@@ -232,6 +230,7 @@
 	var urlEditReservation = '{{ route("edit.reservation") }}';
 	var urlGetProfessors = '{{ route("get.professors") }}';
 	var urlAddProfessor = '{{ route("add.professor") }}';
+	var urlSearchReservations = '{{ route("search.reservations") }}';
 
 	$(document).on('click', 'table .resrows', function(){
 		$('#inputWarning').hide();
