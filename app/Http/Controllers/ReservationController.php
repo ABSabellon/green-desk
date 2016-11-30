@@ -100,14 +100,17 @@ class ReservationController extends Controller
             $start_ts = $res->time_start;
             $end_ts = $res->time_end;
 
-            if($this->checkConflict($start_ts, $end_ts, $request['startTime']) != null) {
+            $room2 = Room::find($res->room_id);
+            $roomNo = ($room2 != null)? $room2->room_no:null;
+
+            if($this->checkConflict($start_ts, $end_ts, $request['startTime'], $roomNo, $request['room']) != null) {
                 Log::info('conflict in start time');
                 $prof = Reservee::find($res->reservee_id);
                 $profName = $prof->first_name . ' ' . $prof->last_name;
                 return response()->json(['name' => $profName], 200);
             }
 
-            if($this->checkConflict($start_ts, $end_ts, $request['endTime']) != null) {
+            if($this->checkConflict($start_ts, $end_ts, $request['endTime'], $roomNo, $request['room']) != null) {
                 Log::info('conflict in end time');
                 $prof = Reservee::find($res->reservee_id);
                 $profName = $prof->first_name . ' ' . $prof->last_name;
@@ -129,8 +132,11 @@ class ReservationController extends Controller
 
     }
 
-    private function checkConflict($start_range, $end_range, $user_time) {
-        return (($user_time >= $start_range) && ($user_time <= $end_range));
+    private function checkConflict($start_range, $end_range, $user_time, $roomNo, $userRoomNo) {
+        if($roomNo == $userRoomNo)
+            return (($user_time >= $start_range) && ($user_time <= $end_range));
+        else
+            return 0;
     }
 
     public function getReservationByReservee(Request $request) {
