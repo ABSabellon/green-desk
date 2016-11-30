@@ -1,0 +1,320 @@
+body{
+	background-color: #EEEEEE;
+}
+
+
+th {
+  background-color: #006535;
+  color: #FFFFFF;
+}
+
+ul{
+	list-style-type: none;
+}
+
+
+.hide {
+  display: none;
+}
+
+.profText{
+	background-color:rgba(255,255,255,0.0);
+	resize: none;
+	border-radius: 5px;
+	border-color: #006535;
+	width: 70%;
+	height: 35px;
+ }
+ 
+ .addText{
+	background-color:rgba(255,255,255,0.0);
+	resize: none;
+	border-radius: 5px;
+	border-color: #006535;
+	width: 70%;
+	height: 35px;
+ }
+ 
+ .firstRow{
+	height: 60px;
+	padding-top: 30px;
+ }
+ 
+ .thirdRow{
+	margin-top: 30px;
+	height: 400px;
+	
+ }
+
+ 
+ .button {
+    background-color: #006535;
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	font-family: 'Verdana', sans-serif;
+	-webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.btn-primary{
+	color: #ffffff;
+  	background-color: #006535;
+  	border-color: #285e8e;
+}
+.btn-primary:hover {
+    background-color: white;
+    color: #006535;
+}
+
+ .modalHeadStyle{
+	background-color: #006535;
+	color: white;
+	font-size: 25px;
+	font-family: 'Verdana', sans-serif;
+ }
+ 
+ .searchBar{
+	background-color:rgba(255,255,255);
+	resize: none;
+	font-size: 13px;
+	border-radius: 5px;
+	border-color: #006535;
+	width: 40%;
+	height: 25px;
+ }
+ 
+.button {
+	float: right;
+    background-color: #006535;
+    border: none;
+    color: white;
+	margin-right: 5px;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+	font-family: 'Verdana', sans-serif;
+	-webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.button:hover {
+    background-color: white;
+    color: #006535;
+}
+
+.buttonFooter {
+	float: right;
+    background-color: #006535;
+    border: groove;
+	border-color:white;
+	border-width:3px;
+    color: white;
+	margin-right: 5px;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+	font-family: 'Verdana', sans-serif;
+	-webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.buttonFooter:hover {
+    background-color: white;
+    color: #006535;
+}
+ 
+#schedCtrlBody{
+	margin-top: 1vh;
+	padding-bottom: 5px;
+	padding-left: 4px;
+	background-color: white;
+	border-radius: 5px;
+	height: 65%;
+}
+
+#schedCtrlBody > #schedCtrl_profName{
+	font-style: 'bold';
+}
+
+#schedCtrlBody > p{
+	font-size: 1vw;
+	font-family: 'Verdana', sans-serif;
+}
+
+#schedCtrlFooter{
+	margin-top: 5px;
+	margin-left: 7px;
+}
+
+#schedCtrlCol{
+	background-color: #006535;
+	border-radius: 5px 0px 0px 5px;
+	height:400px;
+	width: 30%;
+}
+ 
+#schedTableCol{
+	background-color: white;
+	border-radius:  0px 5px 5px 0px;
+	max-width: 100%;
+	width: 70%;
+	height:650px;
+	
+}
+
+#schedTable{
+	background-color: white;
+	
+	height: inherit;
+	width: 100%;
+}
+#schedTableContainer{
+	margin-top: 14px;
+	background-color: white;
+	border: solid;
+	border-width: 3px;
+	border-radius: 12px;
+	border-color: #006535;
+	height: 95%;
+	width: 100%;
+	overflow-y: scroll;
+}
+
+#schedCtrlHeader{
+	color: white;
+	font-family: 'Verdana', sans-serif;
+	font-size: 2.3vw;
+	width: 100%;
+	height: 35px;
+}
+
+#modalDesc{
+	height: 100px;
+}
+
+#modalNotes{
+	height: 100px;
+}
+
+#toolbar{
+	background-color: #006535;
+	height: 50px;
+}
+
+ #toolTitle{
+	font-size: 32px;
+	font-family: 'Verdana', sans-serif;
+	color: white;
+ }
+ 
+ #profTable{
+	height: 400px;
+	overflow-y: scroll;
+ }
+ 
+ 
+ /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #006535;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #006535;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 17px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+
+/*SCROLL STYLE*/
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #efefef;
+  border: 2px none #008000;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00d771;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #009f54;
+}
+::-webkit-scrollbar-track {
+  background: #666666;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #666666;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+</style>

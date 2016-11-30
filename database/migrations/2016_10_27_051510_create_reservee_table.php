@@ -19,6 +19,10 @@ class CreateReserveeTable extends Migration
             $table->string('last_name', 100);
             $table->string('middle_name', 100);
             $table->string('reservee_type', 20); //STUDENT/FULLTIME-PROF/PARTTIME-PROF/STAFF/OTHERS
+            $table->string('professor_status', 20)->nullable();
+            $table->string('professor_college', 10)->nullable();
+            $table->string('professor_base', 10)->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
