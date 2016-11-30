@@ -13,4 +13,10 @@ class RoomController extends Controller
 
     	return response()->json(['rooms' => $rooms], 200);
     }
+
+    public function getRoomsByFloor(Request $request) {
+    	$rooms = Room::where('floor', $request['floor'])->get();
+
+    	return response()->json(['rooms' => $rooms], 200);
+    }
 }
