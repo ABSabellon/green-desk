@@ -198,6 +198,12 @@ ul.tab li a:focus, .active {background-color: #006535;}
 	-webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
 }
+
+.hide-text{
+	font-size: 0;
+	line-height: 0;
+ }
+
 #modalDesc{
 	height: 100px;
 }
