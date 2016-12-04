@@ -66,3 +66,5 @@ Route::post('/add_professor', [
 ]);
 
 Route::get('/export', ['uses' => 'ReservationController@export', 'as' => 'export']);
+
+Route::post('/professor/import', ['uses' => 'ReserveeController@import', 'as' => 'professor.import']);

@@ -119,6 +119,32 @@
 		</div>
 	</div>
 
+	<!-- Import Prof Modal -->
+	<div id="importProfModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- View Prof Modal content-->
+			<div class="modal-content">
+				<div id="reservation">
+					{!! Form::open(array('url'=>route('professor.import'),'method'=>'POST', 'files'=>true))!!}
+					 	{{ csrf_field() }}
+						<div class="modal-header modalHeadStyle">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title modalTitle">Import Professors</h4>
+						</div>
+						<div class="modal-body">
+							<input type="file" name="importfile"/>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-block button">Import</button>
+							<button type="button" class="btn btn-block button" data-dismiss="modal">Close</button>
+						</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<!-- ----------MAIN CONTAINER----------- -->
 	<div class="container-fluid">
 		<div class="row">
@@ -197,6 +223,7 @@
 				<div id = "schedCtrlFooter">
 					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
 					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
+					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 				</div>
 				
 			</div>

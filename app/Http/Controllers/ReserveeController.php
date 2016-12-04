@@ -35,4 +35,15 @@ class ReserveeController extends Controller
 
         return response()->json(['reservees' => $reservees], 200);
     }
+
+    public function import(Request $request){
+        $file = $request->file('importfile')->move(public_path(), 'import.csv');
+        //read file here
+        //Should empty table?
+        //loop til last line
+            //$reservee = new Reservee;
+            //$reservee->name = <values>
+            //$reservee->save();
+        //end loop
+    }
 }
