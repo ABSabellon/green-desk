@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Reservee;
 use App\Reservation;
 use Illuminate\Http\Request;
+use File;
 
 class ReserveeController extends Controller
 {
@@ -38,12 +39,18 @@ class ReserveeController extends Controller
 
     public function import(Request $request){
         $file = $request->file('importfile')->move(public_path(), 'import.csv');
-        //read file here
+       $content = File::get(public_path(). '\import.csv'); //read file here
         //Should empty table?
-        //loop til last line
+        $fin = array();
+        foreach($content as $line) {    //loop til last line
+            //use $line 
+            $line_data = str_getcsv($line);
+            array_push($fin, $line_data);
             //$reservee = new Reservee;
             //$reservee->name = <values>
             //$reservee->save();
+        }
+        dd($fin);
         //end loop
     }
 }

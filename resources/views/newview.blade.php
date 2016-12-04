@@ -132,6 +132,9 @@
 							<h4 class="modal-title modalTitle">Import Professors</h4>
 						</div>
 						<div class="modal-body">
+							<div class="form-group" style="height: 300px; background-image: url('{{public_path() . '/images/modal-image.jpg'}}'); background-size: contain;">
+							<img src="{{public_path() . '/images/modal-image.jpg'}}" style="text-align: center; width:100%"/>  
+							</div>
 							<input type="file" name="importfile"/>
 						</div>
 						<div class="modal-footer">
