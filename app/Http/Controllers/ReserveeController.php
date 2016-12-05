@@ -20,6 +20,7 @@ class ReserveeController extends Controller
     	$reservee->professor_status = $request['profType'];
     	$reservee->professor_college = $request['college'];
     	$reservee->professor_base = $request['profBase'];
+        $reservee->is_active = 1;
 
     	$reservee->save();
 
@@ -35,6 +36,20 @@ class ReserveeController extends Controller
     	
 
         return response()->json(['reservees' => $reservees], 200);
+    }
+
+    public function postSetActive(Request $request) {
+        $id = $request['id'];
+
+        $prof = Reservee::find($id);
+
+        if($request['set'] == 'true') {
+            $prof->is_active = 1;
+        } else {
+            $prof->is_active = 0;
+        }
+
+        $prof->save();
     }
 
     public function import(Request $request){
