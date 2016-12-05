@@ -12,22 +12,40 @@
 */
 
 Route::get('/', function () {
-    return view('newview');
+    return view('index');
+});
+
+Route::get('/gradeconsultation', function () {
+    return view('gc');
+});
+
+Route::get('/finalexams', function () {
+    return view('finals');
 });
 
 Route::post('/add_reservation', [
-    'uses' => 'ReservationController@postAddReservation',
+    'uses' => 'GCController@postAddReservation',
     'as' => 'add.reservation'
 ]);
 
-Route::get('/get_reservations', [
-    'uses' => 'ReservationController@getReservations',
-    'as' => 'get.reservations'
+Route::get('/get_reservations_gc', [
+    'uses' => 'GCController@getReservations',
+    'as' => 'get.reservations.gc'
 ]);
 
-Route::post('/edit_reservation', [
-    'uses' => 'ReservationController@postEditReservation',
-    'as' => 'edit.reservation'
+Route::post('/edit_reservation_gc', [
+    'uses' => 'GCController@postEditReservation',
+    'as' => 'edit.reservation.gc'
+]);
+
+Route::get('/get_reservations_exam', [
+    'uses' => 'ExamController@getReservations',
+    'as' => 'get.reservations.exam'
+]);
+
+Route::post('/edit_reservation_exam', [
+    'uses' => 'ExamController@postEditReservation',
+    'as' => 'edit.reservation.exam'
 ]);
 
 Route::get('/get_rooms', [
@@ -50,11 +68,6 @@ Route::get('/search_reservations', [
     'as' => 'search.reservations'
 ]);
 
-// Route::get('/search_professors', [
-//     'uses' => 'SearchController@getProfessors',
-//     'as' => 'search.prof'
-// ]);
-
 Route::get('/get_professors', [
     'uses' => 'ReserveeController@getProfessors',
     'as' => 'get.professors'
@@ -65,6 +78,10 @@ Route::post('/add_professor', [
     'as' => 'add.professor'
 ]);
 
-Route::get('/export', ['uses' => 'ReservationController@export', 'as' => 'export']);
+Route::post('/set_active_professor', [
+    'uses' => 'ReserveeController@postSetActive',
+    'as' => 'set.active'
+]);
 
+Route::get('/export', ['uses' => 'GCController@export', 'as' => 'export']);
 Route::post('/professor/import', ['uses' => 'ReserveeController@import', 'as' => 'professor.import']);
