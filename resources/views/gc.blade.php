@@ -102,7 +102,7 @@
 									<th>College</th>
 									<th>Base</th>
 									<th>Active</th>
-									<th></th>
+									<th>&nbsp</th>
 								</tr>
 							</thead>
 							<tbody id = "profList">
@@ -118,6 +118,32 @@
 
 		</div>
 	</div>
+
+	<!-- Import Prof Modal -->
+ 	<div id="importProfModal" class="modal fade" role="dialog">
+ 		<div class="modal-dialog">
+ 			<!-- View Prof Modal content-->
+ 			<div class="modal-content">
+ 				<div id="reservation">
+ 					{!! Form::open(array('url'=>route('professor.import'),'method'=>'POST', 'files'=>true))!!}
+ 					 	{{ csrf_field() }}
+ 						<div class="modal-header modalHeadStyle">
+ 							<button type="button" class="close" data-dismiss="modal">&times;</button>
+ 							<h4 class="modal-title modalTitle">Import Professors</h4>
+ 						</div>
+ 						<div class="modal-body">
+ 							<input type="file" name="importfile"/>
+ 						</div>
+ 						<div class="modal-footer">
+ 							<button type="submit" class="btn btn-block button">Import</button>
+ 							<button type="button" class="btn btn-block button" data-dismiss="modal">Close</button>
+ 						</div>
+ 					{!! Form::close() !!}
+ 				</div>
+ 			</div>
+ 
+ 		</div>
+ 	</div>
 
 	<!-- ----------MAIN CONTAINER----------- -->
 	<div class="container-fluid">
@@ -157,7 +183,6 @@
 					Filter by: 
 					<select id = "filterSearch">
 						<option value = "prof">professor</option>
-						<option value = "time">time</option>
 						<option value = "room">room</option>
 					</select>
 				</p>
@@ -190,7 +215,7 @@
 
 						</select>
 					</p>
-					<span style = "color:red" id = "inputWarning">Warning!</span>
+					<span style = "color:red" id = "inputWarning"></span>
 					<button id = "editBtn" class="button">Edit</button>
 				</div>
 
@@ -198,6 +223,7 @@
 				<div id = "schedCtrlFooter">
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
+					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 				</div>
 
 			</div>
@@ -210,9 +236,9 @@
 					<table class="table" id="schedTable">
 						<thead>
 							<tr>
-								<th>Professor</th>
-								<th>Time</th>
-								<th>Room</th>
+								<th id = "professor_sort" value = "0">Professor</th>
+								<th id = "time_sort" value = "0">Time</th>
+								<th id = "room_sort" value = "0">Room</th>
 							</tr>
 						</thead>
 						<tbody id = "reservationList">
@@ -225,259 +251,16 @@
 </body>
 </html>
 <script>
-	var urlGetReservations = '{{ route("get.reservations") }}';
+	var urlGetReservations = '{{ route("get.reservations.gc") }}';
 	var urlGetRooms = '{{ route("get.rooms") }}';
-	var urlEditReservation = '{{ route("edit.reservation") }}';
+	var urlEditReservation = '{{ route("edit.reservation.gc") }}';
 	var urlGetProfessors = '{{ route("get.professors") }}';
 	var urlAddProfessor = '{{ route("add.professor") }}';
 	var urlSearchReservations = '{{ route("search.reservations") }}';
-
-	$(document).on('click', 'table .resrows', function(){
-		$('#inputWarning').hide();
-		$("table tr").css("background", "#FFF");
-		$("table tr").css("color", "#000");
-		$(this).css("background", "#00d771");
-		$(this).css("color", "#FFF");
-
-		resIndex = $('#schedTable tr').index(this) - 1;
-		var reserveeName = reservees[resIndex].first_name +' '+ reservees[resIndex].middle_name +' '+ reservees[resIndex].last_name;
-		
-		$('#schedCtrl_profName > span').html(reserveeName);
-		$('#schedCtrl_profType > span').html(reservees[resIndex].professor_status);
-		$('#schedCtrl_profBase > span').html(reservees[resIndex].professor_base);
-		$('#schedCtrl_profCollege > span').html(reservees[resIndex].professor_college);
-		$('#startTime').val(reservations[resIndex].time_start);
-		$('#endTime').val(reservations[resIndex].time_end);
-
-		$('#schedCtrl_room').val(rooms[resIndex]);
-
-		if(reservations[resIndex].time_start == null) {
-			$('#editBtn').text('Create');
-		} else {
-			$('#editBtn').text('Edit');
-		}
-
-	});
+	var urlSetActive = '{{ route("set.active") }}';
 </script>
 
-<script type="text/javascript">
-	var reservations;
-	var reservees;
-	var reserveeTypes;
-	var rooms;
-	var resIndex;
-
-
-	$(document).ready(function(){
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-		$('#inputWarning').hide();
-		retrieveReservations(null);
-		retrieveRooms(null);
-		retrieveProfessors(null);
-	});
-
-	function retrieveReservations(filter) {
-		$.ajax({
-			method: 'GET',
-			url: urlGetReservations,
-			data: {filter:filter}
-		})
-		.done( function(msg) {
-			reservations = msg.reservations;
-			reservees = msg.reservees;
-			reserveeTypes = msg.reserveeTypes;
-			rooms = msg.rooms;
-			refreshReservations(msg.reservations, msg.reservees, msg.rooms);
-		});
-	}
-
-	function refreshReservations(reservations, reservees, rooms) {
-		$('#reservationList').empty();
-		var table = $('#schedTable > tbody');
-		for (var i = 0; i < reservations.length; i++) {
-			var type = (reservations[i].exam_id == null) ? 'Grade Consultation':'Exam';
-			var reserveeName = reservees[i].first_name +' '+ reservees[i].middle_name +' '+ reservees[i].last_name;
-			var toAppend = '<tr class = "resrows"><td>' +reserveeName+ '</td>'
-			if(reservations[i].time_start == null) {
-				toAppend = toAppend + '<td>No reservation yet</td><td></td></tr>'
-			} else {
-				toAppend = toAppend + '<td><time datetime="' +reservations[i].time_start+ '">' +reservations[i].time_start+ '</time>-<time datetime="' +reservations[i].time_end+ '">' +reservations[i].time_end+ '</time></td><td>' +rooms[i]+ '</td></tr>'
-			}				
-			table.append(toAppend);
-		}
-	}
-
-	function retrieveRooms(filter){
-		$.ajax({
-			method: 'GET',
-			url: urlGetRooms,
-			data: {filter:filter}
-		})
-		.done( function(msg) {
-			refreshRooms(msg.rooms)
-		});
-	}
-
-	function refreshRooms(rooms) {
-		var roomList = $('#schedCtrl_room');
-		roomList.empty();
-		for (var i = 0; i < rooms.length; i++) {
-			roomList.append(
-				'<option>' +rooms[i].room_no+ '</option>'
-				)
-		}
-	}
-
-	$('#editBtn').on('click', function() {
-		checkReservation();
-	})
-
-	function checkReservation() {
-		var diff = (( new Date('2016-1-1 '+ $('#endTime').val())) - new Date('2016-1-1 '+$('#startTime').val())) / 1000 / 60 / 60;
-		if(diff > 1) {
-			$('#inputWarning').text('You can only reserve for a maximum of 1 hour!');
-			$('#inputWarning').show();
-		} else if(diff < 0) {
-			$('#inputWarning').text('Your start time cannot be later than your end time!');
-			$('#inputWarning').show();
-		} else if(resIndex == null) {
-			$('#inputWarning').text('Please choose a reservation');
-			$('#inputWarning').show();
-		} else {
-			editReservation();
-		}
-	}
-
-	function editReservation() {
-		console.log('edit');
-		var startTime = $('#startTime').val();
-		var endTime = $('#endTime').val();
-		var room = $('#schedCtrl_room').val();
-
-		$.ajax({
-			method: 'POST',
-			url: urlEditReservation,
-			data: {index: resIndex+1, startTime:startTime, endTime: endTime, room:room}
-		})
-		.done( function(msg) {
-			if(msg.name != null) {
-				$('#inputWarning').text('Conflict with ' + msg.name +'!');
-				$('#inputWarning').show();
-			}
-			// var rows = $('tr', '#schedTable');
-			// var timeTd = rows.eq(resIndex+1).find('td').eq(1);
-			// var roomTd = rows.eq(resIndex+1).find('td').eq(2);
-			// timeTd.empty();
-			// roomTd.empty();
-
-			// timeTd.append('<td><time datetime="' +startTime+ '">' +startTime+ '</time>-<time datetime="' +endTime+ '">' +endTime+ '</time></td>');
-			// roomTd.append('<td>' +room+ '</td></tr>');
-			retrieveReservations(null);
-		});
-	}
-
-	function retrieveProfessors(filter) {
-		$.ajax({
-			method: 'GET',
-			url: urlGetProfessors,
-			data: {filter:filter}
-		})
-		.done( function(msg) {
-			refreshProfessors(msg.reservees);
-		});
-	}
-
-	function refreshProfessors(profs) {
-		$('#profList').empty();
-		var table = $('#profTbl > tbody');
-		for (var i = 0; i < profs.length; i++) {
-			table.append('<tr>'+
-				'<td contenteditable="false">'+profs[i].first_name+'</td>' +
-				'<td contenteditable="false">'+profs[i].last_name+'</td>' +
-				'<td contenteditable="false">'+profs[i].professor_status+'</td>' +
-				'<td contenteditable="false">'+profs[i].professor_college+'</td>' +
-				'<td contenteditable="false">'+profs[i].professor_base+'</td>' +
-				'<td>' +
-				'<label class="switch">' +
-				'<input type="checkbox">' +
-				'<div class="slider round"></div>' +
-				'</label>' +
-				'</td>' +
-				'<td>'+
-				'<button type="button" class="profeditbtn hide-text btn btn-default btn-xs glyphicon glyphicon-pencil">'+
-				'Edit'+
-				'</button>'+
-				'</td>'+
-				'</tr>');
-		}
-	}
-
-	$(document).on('click', '.profeditbtn', function () {
-		console.log("wew");
-		var currentTD = $(this).parents('tr').find('td');
-		if ($(this).html() == 'Edit') {
-		// if ($(this).hasClass("glyphicon glyphicon-pencil")) {
-			currentTD = $(this).parents('tr').find('td');
-			$.each(currentTD, function () {
-				$(this).prop('contenteditable', true)
-			});
-		} else {
-			$.each(currentTD, function () {
-				$(this).prop('contenteditable', false)
-			});
-		}
-		$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
-	});
-
-	$('#doneBtn').on('click', function() {
-		addReservee();
-		$('#addProfModal').modal('toggle');
-	});
-
-	function addReservee() {
-		var firstName = $('#firstName').val();
-		var lastName = $('#lastName').val();
-		var profType = $('input[name=optradio]:checked', '#typeForm').val();
-		var college = $('#collegeSelect').val();
-		var profBase = $('input[name=optradio]:checked', '#baseForm').val();
-		
-		$.ajax({
-			method: 'POST',
-			url: urlAddProfessor,
-			data: {firstName:firstName, lastName:lastName, profType:profType, college:college, profBase:profBase}
-		})
-		.done( function(msg) {
-			retrieveProfessors(null);
-			retrieveReservations(null);
-		});
-	}
-	
-	var filter = 'prof';
-
-	$('#filterSearch').on('change', function() {
-		filter = $('#filterSearch').val();
-	});
-
-	$('#searchRes').keyup(function(event) {
-		searchResTerm = event.target.value;
-		searchReservations();
-	});
-
-	function searchReservations() {
-		$.ajax({
-			method: 'GET',
-			url: urlSearchReservations,
-			data: {term:searchResTerm, filter:filter}
-		})
-		.done( function(msg) {
-			refreshReservations(msg.reservations, msg.reservees, msg.rooms);
-		});
-	}
-
-</script>						
-
-
+<script src="{{ URL::to('js/gc_reservations.js') }}"></script>
+<script src="{{ URL::to('js/rooms.js') }}"></script>
+<script src="{{ URL::to('js/professors.js') }}"></script>
+<script src="{{ URL::to('js/sortTable.js') }}"></script>
