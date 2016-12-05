@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Room;
 use App\Reservation;
 use App\Reservee;
+use App\Exam;
 use Illuminate\Http\Request;
 use Log;
 
@@ -21,64 +22,106 @@ class SearchController extends Controller
 
     public function getReservations(Request $request) {
 		$term = $request['term'];
+        $type = $request['type'];
         $filter = $request['filter'];
+        $type = $request['type'];
 
         if($filter == 'prof') {
-            return $this->getReservationsByProf($term);
-        } else if($filter == 'time') {
-            return $this->getReservationsByTime($term);
+            return $this->getReservationsByProf($term, $type);
         } else if($filter == 'room') {
-            return $this->getReservationsByRoom($term);
+            return $this->getReservationsByRoom($term, $type);
+        } else if($filter == 'subject') {
+            return $this->getReservationsBySubject($term);
+        } else if($filter == 'section') {
+            return $this->getReservationsBySection($term);
         }
     }
 
-    public function getReservationsByProf($term) {
+    public function getReservationsByProf($term, $type) {
         $reservees = Reservee::where('first_name', 'LIKE', '%'.$term.'%')
                                 ->orWhere('last_name', 'LIKE', '%'.$term.'%')
                                 ->orWhere('middle_name', 'LIKE', '%'.$term.'%')->get();
+        $reservations = array();
+        $rooms = array();
         foreach ($reservees as $reservee) {
-            $reservation = Reservation::where('reservee_id', $reservee->id)->first();
-            $reservations[] = $reservation;
-            $names[] = $reservee->first_name . ' ' . $reservee->last_name;
+            if($type == 'GC') {
+                $reservation = Reservation::whereNull('exam_id')
+                                        ->where('reservee_id', $reservee->id)->first();
+            } else if($type == 'Exam') {
+                $reservation = Reservation::whereNotNull('exam_id')
+                                        ->whereNotNull('room_id')
+                                        ->where('reservee_id', $reservee->id)->first();
+            }
+            Log::info($reservation);
+            $reservation->reservee = $reservee;
             if($reservation->room_id == null) {
-                $rooms[] = "";
+                $reservation->room_no = "";
             } else {
                 $room = Room::find($reservation->room_id);
-                $rooms[] = $room->room_no;
+                $reservation->room_no = $room->room_no;
             }
+            $reservations[] = $reservation;
         }
 
-        return response()->json(['reservations' => $reservations, 'reservees' => $reservees, 'rooms' => $rooms], 200);
+        return response()->json(['reservations' => $reservations], 200);
     }
 
-    public function getReservationsByTime($term) {
-
-    }
-
-    public function getReservationsByRoom($term) {
+    public function getReservationsByRoom($term, $type) {
         $rooms = Room::where('room_no', 'LIKE', '%'.$term.'%')->get();
 
         $reservations = array();
-        $reservees = array();
-        $roomNames = array();
 
         foreach ($rooms as $room) {
-            $reservation = Reservation::where('room_id', $room->id)->first();
+            if($type == 'GC') {
+                $reservation = Reservation::whereNull('exam_id')
+                                        ->where('room_id', $room->id)->first();
+            } else if($type == 'Exam') {
+                $reservation = Reservation::whereNotNull('exam_id')
+                                        ->where('room_id', $room->id)->first();
+            }
             if($reservation != null) {
-                $reservations[] = $reservation;
+                $reservation->room_no = $room->room_no;
                 $reservee = Reservee::find($reservation->reservee_id);
-                $reservees[] = $reservee;
-                $names[] = $reservee->first_name . ' ' . $reservee->last_name;
-                // if($reservation->room_id == null) {
-                //     $rooms[] = "";
-                // } else {
-                //     $room = Room::find($reservation->room_id);
-                //     $rooms[] = $room->room_no;
-                // }
-                $roomNames[] = $room->room_no;
+                $reservation->reservee = $reservee;
+                $reservation->exam = Exam::find($reservation->exam_id);
+                $reservations[] = $reservation;
             }
         }
 
-        return response()->json(['reservations' => $reservations, 'reservees' => $reservees, 'rooms' => $roomNames], 200);
+        return response()->json(['reservations' => $reservations], 200);
+    }
+
+    public function getReservationsBySubject($term) {
+        $exams = Exam::where('subject', 'LIKE', '%'.$term.'%')->get();
+
+        $reservations = array();
+
+        foreach ($exams as $exam) {
+            $reservation = Reservation::where('exam_id', $exam->id)->first();
+            $reservation->exam = $exam;
+            $reservation->reservee = Reservee::find($reservation->reservee_id);
+            $room = Room::find($reservation->room_id);
+            $reservation->room_no = $room->room_no;
+            $reservations[] = $reservation;
+        }
+
+        return response()->json(['reservations' => $reservations], 200);
+    }
+
+    public function getReservationsBySection($term) {
+        $exams = Exam::where('section', 'LIKE', '%'.$term.'%')->get();
+
+        $reservations = array();
+
+        foreach ($exams as $exam) {
+            $reservation = Reservation::where('exam_id', $exam->id)->first();
+            $reservation->exam = $exam;
+            $reservation->reservee = Reservee::find($reservation->reservee_id);
+            $room = Room::find($reservation->room_id);
+            $reservation->room_no = $room->room_no;
+            $reservations[] = $reservation;
+        }
+
+        return response()->json(['reservations' => $reservations], 200);
     }
 }
