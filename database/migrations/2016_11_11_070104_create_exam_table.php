@@ -17,6 +17,7 @@ class CreateExamTable extends Migration
             $table->increments('id');
             $table->string('section', 10);
             $table->string('subject', 10);
+            $table->string('takers', 10);
             $table->timestamps();
         });
     }
