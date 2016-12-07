@@ -17,4 +17,5 @@ function refreshRooms(rooms) {
 			'<option>' +rooms[i].room_no+ '</option>'
 			)
 	}
+	roomList.selectpicker('refresh');
 }
