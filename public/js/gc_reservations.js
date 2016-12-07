@@ -16,12 +16,14 @@ $(document).on('click', 'table .resrows', function(){
 		$('#startTime').val(times[0]);
 		$('#endTime').val(times[1]);
 		$('#schedCtrl_room').val($(this).find('td.resroom')[0].innerText);
+		$('#schedCtrl_room').selectpicker('refresh');
 
 	} else {
 		$('#editBtn').text('Create');
 		$('#startTime').val('');
 		$('#endTime').val('');
 		$('#schedCtrl_room').val('');
+		$('#schedCtrl_room').selectpicker('refresh');
 	}
 });
 
@@ -37,7 +39,6 @@ $(document).ready(function(){
 	$('#inputWarning').hide();
 	retrieveReservations(null);
 	retrieveRooms(null);
-	retrieveProfessors(null);
 });
 
 function retrieveReservations(filter) {
@@ -56,7 +57,7 @@ function refreshReservations(reservations) {
 	$('#reservationList').empty();
 	var table = $('#schedTable > tbody');
 	for (var i = 0; i < reservations.length; i++) {
-		var reserveeName = reservations[i].reservee.first_name +' '+ reservations[i].reservee.middle_name +' '+ reservations[i].reservee.last_name;
+		var reserveeName = reservations[i].reservee.last_name +', '+ reservations[i].reservee.first_name +' '+ reservations[i].reservee.middle_name;
 		var toAppend = '<tr data-id = '+reservations[i].id+' class = "resrows"><td class = "resname" data-status = "' +reservations[i].reservee.professor_status+ '" data-college = "' +reservations[i].reservee.professor_college+ '" data-base = "' +reservations[i].reservee.professor_base+ '">' +reserveeName+ '</td>';
 		if(reservations[i].time_start == null) {
 			toAppend = toAppend + '<td>No reservation yet</td><td></td></tr>'
@@ -114,24 +115,8 @@ var filter = $('#filterSearch').val();
 $('#filterSearch').on('change', function() {
 	filter = $('#filterSearch').val();
 	$('#searchRes').val('');
-	if(filter == 'prof')
+	if(filter == '0')
 		retrieveReservations(null);
 	else
 		retrieveReservations('notnull');
 });
-
-$('#searchRes').keyup(function(event) {
-	searchResTerm = event.target.value;
-	searchReservations();
-});
-
-function searchReservations() {
-	$.ajax({
-		method: 'GET',
-		url: urlSearchReservations,
-		data: {term:searchResTerm, filter:filter, type:'GC'}
-	})
-	.done( function(msg) {
-		refreshReservations(msg.reservations);
-	});
-}
