@@ -22,4 +22,5 @@ class Exam extends Model
     public function takers() {
         return $this->hasOne('App\Taker');
     }
+    
 }
