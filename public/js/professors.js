@@ -15,12 +15,13 @@ function refreshProfessors(profs) {
 	var setChecked;
 	for (var i = 0; i < profs.length; i++) {
 		setChecked = (profs[i].is_active == 1)? 'checked':'';
-		table.append('<tr>'+
-			'<td contenteditable="false">'+profs[i].first_name+'</td>' +
-			'<td contenteditable="false">'+profs[i].last_name+'</td>' +
-			'<td contenteditable="false">'+profs[i].professor_status+'</td>' +
-			'<td contenteditable="false">'+profs[i].professor_college+'</td>' +
-			'<td contenteditable="false">'+profs[i].professor_base+'</td>' +
+		table.append('<tr data-id = "' +profs[i].id+ '">'+
+			'<td class = "proffname" contenteditable="false">'+profs[i].first_name+'</td>' +
+			'<td class = "profmname" contenteditable="false">'+profs[i].middle_name+'</td>' +
+			'<td class = "proflname" contenteditable="false">'+profs[i].last_name+'</td>' +
+			'<td class = "profstatus" contenteditable="false">'+profs[i].professor_status+'</td>' +
+			'<td class = "profcollege" contenteditable="false">'+profs[i].professor_college+'</td>' +
+			'<td class = "profbase" contenteditable="false">'+profs[i].professor_base+'</td>' +
 			'<td>' +
 			'<label class="switch">' +
 			'<input data-id = '+profs[i].id+' class = "setActive" type="checkbox" '+setChecked+'>' +
@@ -52,7 +53,6 @@ function setActiveProf(id, set) {
 }
 
 $(document).on('click', '.profeditbtn', function () {
-	console.log("wew");
 	var currentTD = $(this).parents('tr').find('td');
 	if ($(this).html() == 'Edit') {
 	// if ($(this).hasClass("glyphicon glyphicon-pencil")) {
@@ -63,6 +63,19 @@ $(document).on('click', '.profeditbtn', function () {
 	} else {
 		$.each(currentTD, function () {
 			$(this).prop('contenteditable', false)
+		});
+		var row = $(this).parents('tr');
+		var id = row.attr('data-id');
+		var fname = row.find('td.proffname')[0].innerText;
+		var mname = row.find('td.profmname')[0].innerText;
+		var lname = row.find('td.proflname')[0].innerText;
+		$.ajax({
+			method: 'POST',
+			url: urlEditProf,
+			data: {id: id, firstname: fname, middlename: mname, lastname: lname}
+		})
+		.done( function(msg) {
+			
 		});
 	}
 	$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
