@@ -6,6 +6,9 @@ use App\Reservation;
 use App\Reservee;
 use App\Room;
 use App\Exam;
+use App\Subject;
+use App\Section;
+use App\Taker;
 use Log;
 use Illuminate\Http\Request;
 
@@ -13,12 +16,18 @@ class ExamController extends Controller
 {
     //
     public function postAddReservation(Request $request) {
-        $reservation = Reservation::find($request['index']);
-        $room = Room::where('room_no', $request['room']);
+        $exam = new Exam();
 
-        $reservation->time_start = $request['startTime'];
-        $reservation->time_end = $request['endTime'];
-        $reservation->room_id = $room->id;
+        $exam->subject_id = $request['subject'];
+        $exam->section_id = $request['section'];
+        $exam->taker_id = $request['taker'];
+
+        $exam->save();
+
+        $reservation = new Reservation();
+
+        $reservation->reservee_id = $request['prof'];
+        $reservation->exam_id = $exam->id;
 
         $reservation->save();
     }
@@ -41,7 +50,11 @@ class ExamController extends Controller
                 $room = Room::find($reservation->room_id);
                 $reservation->room_no = $room->room_no;
             }
-            $reservation->exam = Exam::find($reservation->exam_id);
+            $exam = Exam::find($reservation->exam_id);
+            $exam->subject = Subject::find($exam->subject_id)->subject;
+            $exam->section = Section::find($exam->section_id)->section;
+            $exam->takers = Taker::find($exam->taker_id)->taker;
+            $reservation->exam = $exam;
         }
         return response()->json(['reservations' => $reservations], 200);
     }
@@ -59,21 +72,31 @@ class ExamController extends Controller
                 $roomRes = Room::find($res->room_id);
                 $roomNo = ($roomRes != null)? $roomRes->room_no:null;
 
-                if($this->checkConflict($start_ts, $end_ts, $request['startTime'], $roomNo, $request['room']) != null) {
-                    $prof = Reservee::find($res->reservee_id);
-                    $profName = $prof->first_name . ' ' . $prof->last_name;
-                    return response()->json(['warning' => 'Conflict with ' . $profName . '!'], 200);
+                $date = $res->date;
+
+                Log::info($date);
+                Log::info($request['date']);
+
+                if($roomNo == $request['room'] && 
+                    $date == $request['date'] && 
+                    $this->checkConflict($start_ts, $end_ts, $request['startTime']) != null) {
+                        $prof = Reservee::find($res->reservee_id);
+                        $profName = $prof->first_name . ' ' . $prof->last_name;
+                        return response()->json(['warning' => 'Conflict with ' . $profName . '!'], 200);
                 }
 
-                if($this->checkConflict($start_ts, $end_ts, $request['endTime'], $roomNo, $request['room']) != null) {
-                    $prof = Reservee::find($res->reservee_id);
-                    $profName = $prof->first_name . ' ' . $prof->last_name;
-                    return response()->json(['warning' => 'Conflict with ' . $profName . '!'], 200);
+                if($roomNo == $request['room'] && 
+                    $date == $request['date'] && 
+                    $this->checkConflict($start_ts, $end_ts, $request['endTime']) != null) {
+                        $prof = Reservee::find($res->reservee_id);
+                        $profName = $prof->first_name . ' ' . $prof->last_name;
+                        return response()->json(['warning' => 'Conflict with ' . $profName . '!'], 200);
                 }
             }
 
         }
 
+        $reservation->date = $request['date'];
         $reservation->time_start = $request['startTime'];
         $reservation->time_end = $request['endTime'];
         $reservation->room_id = $room->id;
@@ -82,11 +105,8 @@ class ExamController extends Controller
 
     }
 
-    private function checkConflict($start_range, $end_range, $user_time, $roomNo, $userRoomNo) {
-        if($roomNo == $userRoomNo)
-            return (($user_time >= $start_range) && ($user_time <= $end_range));
-        else
-            return 0;
+    private function checkConflict($start_range, $end_range, $user_time) {
+        return (($user_time >= $start_range) && ($user_time <= $end_range));
     }
 
     public function export(){
