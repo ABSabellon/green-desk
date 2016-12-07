@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Reservee;
 use App\Reservation;
 use Illuminate\Http\Request;
-use File;
 
 class ReserveeController extends Controller
 {
@@ -34,6 +33,13 @@ class ReserveeController extends Controller
     public function getProfessors(Request $request) {
     	$reservees = Reservee::all();
     	
+        // foreach ($reservees as $reservee) {
+        //     if(Reservation::where('reservee_id', $reservee->id)->first() == null) {
+        //         $reservation = new Reservation();
+        //         $reservation->reservee_id = $reservee->id;
+        //         $reservation->save();
+        //     }
+        // }
 
         return response()->json(['reservees' => $reservees], 200);
     }
@@ -52,11 +58,20 @@ class ReserveeController extends Controller
         $prof->save();
     }
 
+    public function postEditProfessor(Request $request) {
+        $reservee = Reservee::find($request['id']);
+
+        $reservee->first_name = $request['firstname'];
+        $reservee->middle_name = $request['middlename'];
+        $reservee->last_name = $request['lastname'];
+
+        $reservee->save();
+    }
+
     public function import(Request $request){
         $file = $request->file('importfile')->move(public_path(), 'import.csv');
         $contents = $file = fopen(public_path(). '\import.csv', 'r');
         $header = null;
-
         while (($line = fgetcsv($contents)) !== FALSE) {
             if($header == null) {
                 $header = $line;
@@ -72,13 +87,13 @@ class ReserveeController extends Controller
                 $reservee->first_name = $line[1];
                 $reservee->last_name = $line[0];
                 $reservee->middle_name = $line[2];
-                $reservee->reservee_type = $line[3];
+                $reservee->professor_status = $line[3];
                 $reservee->professor_college = $line[4];
                 $reservee->professor_base = $line[5];
+                $reservee->reservee_type = 'Professor';
                 $reservee->save();
             }
         }
-
-        return redirect('/gradeconsultation');
+        return redirect('/professorlist');
     }
 }
