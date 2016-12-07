@@ -158,7 +158,7 @@ ul{
 	padding-left: 4px;
 	background-color: white;
 	border-radius: 5px;
-	height: 65%;
+	height: 75%;
 }
 
 #schedCtrlBody > #schedCtrl_profName{
@@ -178,7 +178,7 @@ ul{
 #schedCtrlCol{
 	background-color: #006535;
 	border-radius: 5px 0px 0px 5px;
-	height:400px;
+	height:600px;
 	width: 30%;
 }
  
@@ -299,6 +299,18 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+#schedTable th {
+	cursor:pointer;
+}
+
+#navbar a {
+	color:white;
+}
+
+#navbar .active a {
+	color:#333333;
 }
 
 
