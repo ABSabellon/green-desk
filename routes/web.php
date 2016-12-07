@@ -23,9 +23,13 @@ Route::get('/finalexams', function () {
     return view('finals');
 });
 
-Route::post('/add_reservation', [
+Route::get('/proflist', function () {
+    return view('proflist');
+});
+
+Route::post('/add_reservation_gc', [
     'uses' => 'GCController@postAddReservation',
-    'as' => 'add.reservation'
+    'as' => 'add.reservation.gc'
 ]);
 
 Route::get('/get_reservations_gc', [
@@ -36,6 +40,11 @@ Route::get('/get_reservations_gc', [
 Route::post('/edit_reservation_gc', [
     'uses' => 'GCController@postEditReservation',
     'as' => 'edit.reservation.gc'
+]);
+
+Route::post('/add_reservation_exam', [
+    'uses' => 'ExamController@postAddReservation',
+    'as' => 'add.reservation.exam'
 ]);
 
 Route::get('/get_reservations_exam', [
@@ -81,6 +90,26 @@ Route::post('/add_professor', [
 Route::post('/set_active_professor', [
     'uses' => 'ReserveeController@postSetActive',
     'as' => 'set.active'
+]);
+
+Route::post('/edit_professor', [
+    'uses' => 'ReserveeController@postEditProfessor',
+    'as' => 'edit.professor'
+]);
+
+Route::get('/get_subjects', [
+    'uses' => 'SubjectController@getSubjects',
+    'as' => 'get.subjects'
+]);
+
+Route::get('/get_sections', [
+    'uses' => 'SectionController@getSections',
+    'as' => 'get.sections'
+]);
+
+Route::get('/get_takers', [
+    'uses' => 'TakerController@getTakers',
+    'as' => 'get.takers'
 ]);
 
 Route::get('/export', ['uses' => 'GCController@export', 'as' => 'export']);
