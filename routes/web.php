@@ -102,6 +102,11 @@ Route::get('/get_subjects', [
     'as' => 'get.subjects'
 ]);
 
+Route::post('/delete_professor', [
+    'uses' => 'ReserveeController@postDeleteProfessor',
+    'as' => 'delete.professor'
+]);
+
 Route::get('/get_sections', [
     'uses' => 'SectionController@getSections',
     'as' => 'get.sections'
