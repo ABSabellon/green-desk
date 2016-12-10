@@ -21,13 +21,13 @@ class ReserveeController extends Controller
     	$reservee->professor_base = $request['profBase'];
         $reservee->is_active = 1;
 
-    	$reservee->save();
+        $reservee->save();
 
-    	$reservation = new Reservation();
+        $reservation = new Reservation();
 
-    	$reservation->reservee_id = $reservee->id;
+        $reservation->reservee_id = $reservee->id;
 
-    	$reservation->save();
+        $reservation->save();
     }
 
     public function getProfessors(Request $request) {
@@ -57,7 +57,13 @@ class ReserveeController extends Controller
 
         $prof->save();
     }
-    
+
+    public function postDeleteProfessor(Request $request) {
+        $id = $request['id'];
+        $prof = Reservee::find($id);    
+        $prof->forceDelete();
+    }
+
     public function postEditProfessor(Request $request) {
         $reservee = Reservee::find($request['id']);
 
