@@ -57,13 +57,18 @@ class ReserveeController extends Controller
 
         $prof->save();
     }
-
+    
     public function postEditProfessor(Request $request) {
         $reservee = Reservee::find($request['id']);
 
         $reservee->first_name = $request['firstname'];
         $reservee->middle_name = $request['middlename'];
         $reservee->last_name = $request['lastname'];
+
+        $reservee->professor_status = $request['status'];
+        $reservee->professor_college = $request['college'];
+        $reservee->professor_base = $request['base'];
+
 
         $reservee->save();
     }
