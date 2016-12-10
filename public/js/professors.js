@@ -29,8 +29,12 @@ function refreshProfessors(profs) {
 			'</label>' +
 			'</td>' +
 			'<td>'+
-			'<button type="button" class="profeditbtn hide-text btn btn-default btn-xs glyphicon glyphicon-pencil">'+
+			'<button type="button" class="profeditbtn hide-text btn btn-primary btn-xs glyphicon glyphicon-pencil">'+
 			'Edit'+
+			'</button>'+
+			'</td>'+
+			'<td>'+
+			'<button type="button" class="profdeletebtn hide-text btn btn-danger btn-xs glyphicon glyphicon-trash">'+
 			'</button>'+
 			'</td>'+
 			'</tr>');
@@ -51,6 +55,27 @@ function setActiveProf(id, set) {
 		
 	});
 }
+
+$(document).on('click', '.profdeletebtn', function () {
+	if(confirm("Are you would want to delete this entry?")){
+		var currentTD = $(this).parents('tr').find('td');
+		var row = $(this).parents('tr');
+		var id = row.attr('data-id');
+		console.log(id);
+		$.ajax({
+			method: 'POST',
+			url: urlDeleteProf,
+			data: {id: id}
+		})
+		.done( function(msg) {
+			retrieveProfessors(null);
+			retrieveReservations(null);
+		});
+	}
+	else{
+		return false;
+	}
+});
 
 $(document).on('click', '.profeditbtn', function () {
 	var currentTD = $(this).parents('tr').find('td');
