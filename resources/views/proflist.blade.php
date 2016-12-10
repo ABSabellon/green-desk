@@ -65,8 +65,8 @@
 					</div>
 					<div class="modal-body">
 						<ul>
-							<li><textarea id = "firstName" class="profText" placeholder="First Name" ></textarea></li>
-							<li><textarea id = "lastName" class="profText" placeholder="Last Name" ></textarea></li>
+							<li><textarea id = "firstName" class="profText" placeholder="First Name" required=""></textarea></li>
+							<li><textarea id = "lastName" class="profText" placeholder="Last Name" required=""></textarea></li>
 							<li>
 								<label for = "typeOp">Type:</label>
 								<div id = "typeOp">
@@ -169,6 +169,7 @@
 							<th>Base</th>
 							<th>Active</th>
 							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody id = "profList">
@@ -178,7 +179,7 @@
 			</div>
 			<div class="panel-footer">
 				<button type="button" class="btn button" data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
-				<button type="button" class="btn button"data-toggle="modal" data-target="#importProfModal">Import Professors</button>
+				<button type="button" class="btn button" data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 			</div>
 		</div>
 	</div>
@@ -189,6 +190,8 @@
 	var urlAddProfessor = '{{ route("add.professor") }}';
 	var urlSetActive = '{{ route("set.active") }}';
 	var urlEditProf = '{{ route("edit.professor") }}';
+	var urlDeleteProf = '{{ route("delete.professor") }}';
+
 
 	$(document).ready(function(){
 	$.ajaxSetup({
