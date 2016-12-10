@@ -69,13 +69,15 @@ $(document).on('click', '.profeditbtn', function () {
 		var fname = row.find('td.proffname')[0].innerText;
 		var mname = row.find('td.profmname')[0].innerText;
 		var lname = row.find('td.proflname')[0].innerText;
+		var pstatus = row.find('td.profstatus')[0].innerText;
+		var pcollege = row.find('td.profcollege')[0].innerText;
+		var pbase = row.find('td.profbase')[0].innerText;
 		$.ajax({
 			method: 'POST',
 			url: urlEditProf,
-			data: {id: id, firstname: fname, middlename: mname, lastname: lname}
+			data: {id: id, firstname: fname, middlename: mname, lastname: lname, status: pstatus, college: pcollege, base: pbase}
 		})
 		.done( function(msg) {
-			
 		});
 	}
 	$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
