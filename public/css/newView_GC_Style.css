@@ -158,7 +158,16 @@ ul{
 	padding-left: 4px;
 	background-color: white;
 	border-radius: 5px;
-	height: 65%;
+	height: 58%;
+}
+
+#schedFCtrlBody{
+	margin-top: 1vh;
+	padding-bottom: 5px;
+	padding-left: 4px;
+	background-color: white;
+	border-radius: 5px;
+	height: 62%;
 }
 
 #schedCtrlBody > #schedCtrl_profName{
@@ -178,7 +187,14 @@ ul{
 #schedCtrlCol{
 	background-color: #006535;
 	border-radius: 5px 0px 0px 5px;
-	height:400px;
+	height:480px;
+	width: 30%;
+}
+
+#schedFCtrlCol{
+	background-color: #006535;
+	border-radius: 5px 0px 0px 5px;
+	height:525px;
 	width: 30%;
 }
  
