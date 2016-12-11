@@ -58,7 +58,7 @@ function refreshReservations(reservations) {
 	var table = $('#schedTable > tbody');
 	for (var i = 0; i < reservations.length; i++) {
 		var reserveeName = reservations[i].reservee.last_name +', '+ reservations[i].reservee.first_name +' '+ reservations[i].reservee.middle_name;
-		var toAppend = '<tr data-id = '+reservations[i].id+' class = "resrows"><td class = "resname" data-status = "' +reservations[i].reservee.professor_status+ '" data-college = "' +reservations[i].reservee.professor_college+ '" data-base = "' +reservations[i].reservee.professor_base+ '">' +reserveeName+ '</td>';
+		var toAppend = '<tr data-id = '+reservations[i].id+' class = "resrows"><td class = "rescollege">' + reservations[i].reservee.professor_college + '</td><td class = "resname" data-status = "' +reservations[i].reservee.professor_status+ '" data-college = "' +reservations[i].reservee.professor_college+ '" data-base = "' +reservations[i].reservee.professor_base+ '">' +reserveeName+ '</td>';
 		if(reservations[i].time_start == null) {
 			toAppend = toAppend + '<td>No reservation yet</td><td></td></tr>'
 		} else {
