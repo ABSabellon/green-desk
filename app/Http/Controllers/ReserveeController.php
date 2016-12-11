@@ -51,34 +51,4 @@ class ReserveeController extends Controller
 
         $prof->save();
     }
-
-    public function import(Request $request){
-        $file = $request->file('importfile')->move(public_path(), 'import.csv');
-        $contents = $file = fopen(public_path(). '\import.csv', 'r');
-        $header = null;
-
-        while (($line = fgetcsv($contents)) !== FALSE) {
-            if($header == null) {
-                $header = $line;
-            }
-            else{
-                /*0 => "﻿Last Name"
-                1 => "First Name"
-                2 => "Middle Name "
-                3 => "Type"
-                4 => "College"
-                5 => "Base"*/
-                $reservee = new Reservee;
-                $reservee->first_name = $line[1];
-                $reservee->last_name = $line[0];
-                $reservee->middle_name = $line[2];
-                $reservee->reservee_type = $line[3];
-                $reservee->professor_college = $line[4];
-                $reservee->professor_base = $line[5];
-                $reservee->save();
-            }
-        }
-
-        return redirect('/gradeconsultation');
-    }
 }

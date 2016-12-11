@@ -102,4 +102,42 @@ class GCController extends Controller
 
         return response()->download($path);
     }
+
+    public function import(Request $request){
+        $file = $request->file('importfile')->move(public_path(), 'import.csv');
+        $contents = $file = fopen(public_path(). '\import.csv', 'r');
+        $header = null;
+
+        while (($line = fgetcsv($contents)) !== FALSE) {
+            if($header == null) {
+                $header = $line;
+            }
+            else{
+                /*
+                0 - College
+                1 - Last Name
+                2 - First Name 
+                3 - Middle Name
+                4 - Time Start
+                5 - Time End
+                5 - Room
+                */
+                $data = new Reservation;
+                $data->time_start = $line[4];
+                $data->time_end = $line[5];
+
+                $reservee = Reservee::getReserveeWithName($line[1], $line[2], $line[3])->get();
+
+                $data->reservee_id = $reservee[0]->id;
+
+                $room = Room::getRoomId($line[6])->get();
+                
+                $data->room_id = $room[0]->id;
+
+                $data->save();
+            }
+        }
+
+        return redirect('/gradeconsultation');
+    }
 }

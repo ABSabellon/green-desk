@@ -84,4 +84,4 @@ Route::post('/set_active_professor', [
 ]);
 
 Route::get('/export', ['uses' => 'GCController@export', 'as' => 'export']);
-Route::post('/professor/import', ['uses' => 'ReserveeController@import', 'as' => 'professor.import']);
+Route::post('/import', ['uses' => 'GCController@import', 'as' => 'import']);

@@ -14,4 +14,9 @@ class Room extends Model
     public function roomtype() {
     	return $this->hasOne('App/RoomType');
     }
+
+    public static function getRoomId($room_no){
+        return \DB::table('rooms')
+            ->where('room_no', '=', $room_no);
+    }
 }

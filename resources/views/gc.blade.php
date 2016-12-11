@@ -120,16 +120,16 @@
 	</div>
 
 	<!-- Import Prof Modal -->
- 	<div id="importProfModal" class="modal fade" role="dialog">
+ 	<div id="importModal" class="modal fade" role="dialog">
  		<div class="modal-dialog">
  			<!-- View Prof Modal content-->
  			<div class="modal-content">
  				<div id="reservation">
- 					{!! Form::open(array('url'=>route('professor.import'),'method'=>'POST', 'files'=>true))!!}
+ 					{!! Form::open(array('url'=>route('import'),'method'=>'POST', 'files'=>true))!!}
  					 	{{ csrf_field() }}
  						<div class="modal-header modalHeadStyle">
  							<button type="button" class="close" data-dismiss="modal">&times;</button>
- 							<h4 class="modal-title modalTitle">Import Professors</h4>
+ 							<h4 class="modal-title modalTitle">Import</h4>
  						</div>
  						<div class="modal-body">
  							<input type="file" name="importfile"/>
@@ -176,6 +176,7 @@
 		<div class="row" id="firstRow">
 			<div class = "col-xs-4">
 				<a class="btn btn-primary" id = "editprofbtn" href="{{ route('export') }}">Export</a>
+				<button type="button" class="btn btn-primary"data-toggle="modal" data-target="#importModal">Import</button>
 			</div>
 			<div class = "col-xs-8">
 				<p style = "margin-left: -40px;">
@@ -223,7 +224,6 @@
 				<div id = "schedCtrlFooter">
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
-					<button type="button" class="btn btn-block buttonFooter"data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 				</div>
 
 			</div>
