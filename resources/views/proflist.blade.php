@@ -182,13 +182,13 @@
 				<table id = "profTbl" class="table table-condensed searchableTable">
 					<thead>
 						<tr>
-							<th>Firstname</th>
-							<th>Middle Initial</th>
-							<th>Lastname</th>
-							<th>Type</th>
-							<th>College</th>
-							<th>Base</th>
-							<th>Active</th>
+							<th class = "header_sort" value = 1 name = "firstname">Firstname</th>
+							<th class = "header_sort" value = 1 name = "middle_initial">Middle Initial</th>
+							<th class = "header_sort" value = 1 name = "lastname">Lastname</th>
+							<th class = "header_sort" value = 1 name = "type">Type</th>
+							<th class = "header_sort" value = 1 name = "college">College</th>
+							<th class = "header_sort" value = 1 name = "base">Base</th>
+							<th class = "header_sort" value = 1 name = "active">Active</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -226,3 +226,4 @@
 </script>
 <script src="{{ URL::to('js/professors.js') }}"></script>
 <script src="{{ URL::to('js/searching.js') }}"></script>
+<script src="{{ URL::to('js/sortTable.js') }}"></script>
