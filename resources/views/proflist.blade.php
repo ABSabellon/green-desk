@@ -65,8 +65,8 @@
 					</div>
 					<div class="modal-body">
 						<ul>
-							<li><textarea id = "firstName" class="profText" placeholder="First Name" required=""></textarea></li>
-							<li><textarea id = "lastName" class="profText" placeholder="Last Name" required=""></textarea></li>
+							<li><textarea id = "firstName" class="profText" placeholder="First Name" required></textarea></li>
+							<li><textarea id = "lastName" class="profText" placeholder="Last Name" required></textarea></li>
 							<li>
 								<label for = "typeOp">Type:</label>
 								<div id = "typeOp">
@@ -81,7 +81,7 @@
 									<option>CCS</option>
 									<option>GCOE</option>
 									<option>COS</option>
-									<option>RVCOB</option>
+									<option>RVR COB</option>
 									<option>CLA</option>
 									<option>COED</option>
 									<option>SOE</option>
@@ -108,6 +108,27 @@
 		</div>
 	</div>
 
+	<!-- DELETE PROF CONFIRMATION MODAL -->
+	<!-- Add Prof Modal -->
+	<div id="deleteProfModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Add Prof Modal content-->
+			<div class="modal-content">
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Are you sure you want to delete this entry?</h4>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger button" id="deleteProfConfirmBtn">Delete</button>
+						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<!-- ----------TOOLBAR---------- -->
 	<!-- ----------MAIN CONTAINER----------- -->
 	<div class="container-fluid">
@@ -123,7 +144,7 @@
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li><a href="/gradeconsultation">Grade Consultation</a></li>
-							<li><a href="/finalexams" >Finals</a></li>
+							<!-- <li><a href="/finalexams" >Finals</a></li> -->
 							<li class="active"><a href="/proflist" >Professor List</a></li>
 						</ul> 
 					</div><!--/.nav-collapse -->
