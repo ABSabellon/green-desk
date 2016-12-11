@@ -121,9 +121,10 @@
 					<table class="table searchableTable" id="schedTable">
 						<thead>
 							<tr>
-								<th id = "professor_sort" value = 1>Professor</th>
-								<th id = "time_sort" value = 1>Time</th>
-								<th id = "room_sort" value = 1>Room</th>
+								<th class = "header_sort" name = "college" value = 1>College</th>
+								<th class = "header_sort" id = "professor_sort" value = 1>Professor</th>
+								<th class = "header_sort" id = "time_sort" value = 1>Time</th>
+								<th class = "header_sort" id = "room_sort" value = 1>Room</th>
 							</tr>
 						</thead>
 						<tbody id = "reservationList">
