@@ -57,25 +57,41 @@ function setActiveProf(id, set) {
 }
 
 $(document).on('click', '.profdeletebtn', function () {
-	if(confirm("Are you would want to delete this entry?")){
-		var currentTD = $(this).parents('tr').find('td');
-		var row = $(this).parents('tr');
-		var id = row.attr('data-id');
-		console.log(id);
-		$.ajax({
-			method: 'POST',
-			url: urlDeleteProf,
-			data: {id: id}
-		})
-		.done( function(msg) {
-			retrieveProfessors(null);
-			retrieveReservations(null);
-		});
-	}
-	else{
-		return false;
-	}
+	var currentTD = $(this).parents('tr').find('td');
+	var row = $(this).parents('tr');
+	var id = row.attr('data-id');
+	// console.log(id);
+	$('#deleteProfModal').modal('show');
+	$('#deleteProfConfirmBtn').on('click', function() {
+		deleteProfessor(id);
+		$('#deleteProfModal').modal('hide');
+		$(this).removeData('#deleteProfModal')
+		id = null;			//needed because of weird bug
+	});
 });
+
+function deleteProfessor(id){
+	// if(confirm("Are you sure you would want to delete this entry?")){
+	// 	var currentTD = $(this).parents('tr').find('td');
+	// 	var row = $(this).parents('tr');
+	// 	var id = row.attr('data-id');	
+	if(id == null)			//needed because of weird bug
+		return false
+	// console.log(id + " deleted");
+	$.ajax({
+		method: 'POST',
+		url: urlDeleteProf,
+		data: {id: id}
+	})
+	.done( function(msg) {
+		retrieveProfessors(null);
+		retrieveReservations(null);
+	});
+	// }
+	// else{
+	// 	return false;
+	// }
+}
 
 $(document).on('click', '.profeditbtn', function () {
 	var currentTD = $(this).parents('tr').find('td');
