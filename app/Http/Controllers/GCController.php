@@ -89,13 +89,14 @@ class GCController extends Controller
     }
 
     public function export(){
-        $data = Reservation::whereNull('exam_id')->get()->toArray();
+        $data = Reservation::getReservationsTable();
         $path = public_path() . '/export.csv';
         $out = fopen($path, 'w');
-        fputcsv($out, array_keys($data[1]));
-        foreach($data as $line)
+        fputcsv($out, $data->headers);
+
+        foreach($data->get()->toArray() as $line)
         {
-            fputcsv($out, $line);
+            fputcsv($out, (array) $line);
         }
         fclose($out);
 
