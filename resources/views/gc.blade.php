@@ -82,6 +82,55 @@
 		</div>
 	</div>
 
+	<!-- View Recommendation Modal -->
+	<div id="viewRecModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Recommendations</h4>
+						<h4 class="modal-title modalTitle" id="recHead"></h4>
+					</div>
+					<div class="modal-body">
+						<table class="table searchableTable" id="toBeRecTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "fTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "tobeRecList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="recTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "tTF" value = 1>Time Taken</th>
+									<th class = "header_sort" id = "profname_sort" value = 1>Taken By</th>
+								</tr>
+							</thead>
+							<tbody id = "recommendationList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="roomRecTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "rTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "roomRecList">
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<!-- View Prof Modal -->
 	<div id="viewProfModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -242,6 +291,7 @@
 
 						</select>
 					</p>
+					<button id = "recBtn" class="button">Recommendations</button>
 					<span style = "color:red" id = "inputWarning"></span>
 					<button id = "editBtn" class="button">Edit</button>
 				</div>
