@@ -68,9 +68,6 @@ function refreshReservations(reservations) {
 	}
 }
 
-$('#editBtn').on('click', function() {
-	checkReservation();
-})
 
 function checkReservation() {
 	var diff = (( new Date('2016-1-1 '+ $('#endTime').val())) - new Date('2016-1-1 '+$('#startTime').val())) / 1000 / 60 / 60;
@@ -110,13 +107,165 @@ function editReservation() {
 	});
 }
 
+$('#recBtn').on('click', function() {
+	checkRecommendation();
+})
+
+function checkRecommendation() {
+	room = $('#schedCtrl_room').val();
+	sT = $('#startTime').val();
+	eT = $('#endTime').val();
+	if(room == null) {
+		$('#inputWarning').text('Please choose a room 1st');
+		$('#inputWarning').show();
+	}else if(sT == null || eT == null){
+		$('#inputWarning').text('Pick time first');
+		$('#inputWarning').show();
+	} else {
+		retrieveRecommendation(null, room, sT, eT);
+		$('#fTF').text('Free Time for '+ room);
+		$('#fTF').show();
+		$('#tTF').text('Time Taken for '+ room);
+		$('#tTF').show();
+		$('#rTF').text('Free Room for '+ sT+'-'+eT);
+		$('#rTF').show();
+		$('#viewRecModal').modal();
+	}
+}
+
+function retrieveRecommendation(filter, room, sT, eT) {
+
+	$.ajax({
+		method: 'GET',
+		url: urlGetReservations,
+		data: {filter:filter}
+	})
+	.done( function(msg) {
+		reservations = msg.reservations;
+		refreshRecommendations(msg.reservations, room, sT ,eT);
+
+	});
+}
+
+function forRoom(reservations, room){
+	reservations = acsBubbleSorting(reservations);
+
+	var x = 0;
+	
+	for (var i = 0; i < reservations.length; i++) {
+		if(reservations[i].room_no == room) {
+		x+=1;
+		}
+	}
+
+	var resArr = new Array(x);
+	for (var j = 0, i = 0, k = 0; j < resArr.length; j++) {
+		resArr[j] = new Array(5);
+		k = 0;
+		for (; k == 0; i++) {
+			if(reservations[i].room_no == room){
+				resArr[j][0] = reservations[i].reservee.last_name;
+				resArr[j][1] = reservations[i].reservee.first_name;
+				resArr[j][2] = reservations[i].reservee.middle_name;
+				resArr[j][3] = reservations[i].time_start;
+				resArr[j][4] = reservations[i].time_end;
+				k = 1;
+			}
+		}
+	}
+
+	var table1 = $('#toBeRecTable > tbody');
+	if(x == 0){
+		toAppend = '<tr><td>24:00:00 - 23:59:59</td></tr>';
+		table1.append(toAppend);
+	}
+	else{
+		for (var i = 0; i < resArr.length; i++) {
+			if(resArr.length == 1){
+				if(resArr[i][3] == '24:00:00'){
+					toAppend = '<tr><td>'+resArr[i][4]+' - 23:59:59</td></tr>';
+					table1.append(toAppend);
+				}
+				else if(resArr[i][4] == '23:59:59'){
+					toAppend = '<tr><td>24:00:00 - '+resArr[i][3]+'</td></tr>';
+					table1.append(toAppend);
+				}
+				else{
+					toAppend = '<tr><td>24:00:00 - '+resArr[i][3]+'</td></tr>';
+					table1.append(toAppend);
+					toAppend = '<tr><td>'+resArr[i][4]+' - 23:59:59</td></tr>';
+					table1.append(toAppend);
+				}
+			}else{
+				if(resArr[i][3] == '24:00:00' && i == 0){
+					toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+					table1.append(toAppend);
+				}
+				if((resArr[i][3] != '24:00:00' && i == 0)){
+					toAppend = '<tr><td>24:00:00 - '+resArr[i+1][3]+'</td></tr>';
+					table1.append(toAppend);
+				}
+				if(i > 0 && i < resArr.length-1){
+					toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+					table1.append(toAppend);
+				}
+				if(i == resArr.length && resArr[i][4] != '23:00:00'){
+					toAppend = '<tr><td>'+resArr[i][4]+' - 23:59:59</td></tr>';
+					table1.append(toAppend);
+				}
+			}
+		}
+
+		var table2 = $('#recTable > tbody');
+		for (var i = 0; i < reservations.length; i++) {
+			if(reservations[i].room_no == room) {
+				var reserveeName = reservations[i].reservee.last_name +', '+ reservations[i].reservee.first_name +' '+ reservations[i].reservee.middle_name;
+				toAppend = '<tr><td class = "restime"><time datetime="' +reservations[i].time_start+ '">' +reservations[i].time_start+ '</time>-<time datetime="' +reservations[i].time_end+ '">' +reservations[i].time_end+ '</time></td><td>'+reserveeName+'<td></tr>'
+				table2.append(toAppend);
+			}
+		}
+
+	}
+}
+
+
+
+function refreshRecommendations(reservations, room, sT, eT) {
+	$('#recommendationList').empty();
+	$('#tobeRecList').empty();
+
+	$('#inputWarning').text(sT);
+	$('#inputWarning').show();
+
+	
+	
+	forRoom(reservations, room);
+}
+
+function acsBubbleSorting(reservations){
+	n = reservations.length;
+	for (c = 0; c < ( n - 1 ); c++) {
+      for (d = 0; d < n - c - 1; d++) {
+        if (reservations[d] > reservations[d+1]) /* For descending order use < */
+        {
+          swap = reservations[d];
+          reservations[d] = reservations[d+1];
+          reservations[d+1] = swap;
+        }
+      }
+    }
+    return reservations;
+}
+
 var filter = $('#filterSearch').val();
 
 $('#filterSearch').on('change', function() {
 	filter = $('#filterSearch').val();
 	$('#searchRes').val('');
-	if(filter == '0')
+	if(filter == '0'){
 		retrieveReservations(null);
-	else
+	}
+	else{
 		retrieveReservations('notnull');
+	}
 });
