@@ -132,7 +132,7 @@
  							<h4 class="modal-title modalTitle">Import</h4>
  						</div>
  						<div class="modal-body">
- 							<input type="file" name="importfile"/>
+ 							<input type="file" name="importfile" required="true" />
  						</div>
  						<div class="modal-footer">
  							<button type="submit" class="btn btn-block button">Import</button>
@@ -158,7 +158,7 @@
  							<h4 class="modal-title modalTitle">Import Professors</h4>
  						</div>
  						<div class="modal-body">
- 							<input type="file" name="importfile"/>
+ 							<input type="file" name="importfile" required="true" />
  						</div>
  						<div class="modal-footer">
  							<button type="submit" class="btn btn-block button">Import</button>
@@ -250,6 +250,7 @@
 				<div id = "schedCtrlFooter">
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
 					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
+					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 				</div>
 
 			</div>

@@ -107,7 +107,7 @@ class GCController extends Controller
         $file = $request->file('importfile')->move(public_path(), 'import.csv');
         $contents = $file = fopen(public_path(). '\import.csv', 'r');
         $header = null;
-
+        $err = null;
         while (($line = fgetcsv($contents)) !== FALSE) {
             if($header == null) {
                 $header = $line;
@@ -127,17 +127,34 @@ class GCController extends Controller
                 $data->time_end = $line[5];
 
                 $reservee = Reservee::getReserveeWithName($line[1], $line[2], $line[3])->get();
-
-                $data->reservee_id = $reservee[0]->id;
-
+                /*dd(count(Reservee::getReserveeWithName('a','b','c')->get()));*/
+                if(count($reservee) > 0){
+                    $data->reservee_id = $reservee[0]->id;
+                }
+                else {
+                    $err = "Prof with id:" . $data->reservee_id . " does not exist";
+                }
+                
                 $room = Room::getRoomId($line[6])->get();
                 
-                $data->room_id = $room[0]->id;
-
-                $data->save();
+                if(count($room) > 0){
+                    $data->room_id = $room[0]->id;
+                }
+                else {
+                    $err = "Prof with id:" . $data->reservee_id . " does not exist";
+                }               
+                
+                if($err == null){
+                    $data->save();
+                }
             }
         }
 
-        return redirect('/gradeconsultation');
+        if($err){
+            return redirect('/gradeconsultation');
+        }
+        else{
+            return $err;
+        }
     }
 }
