@@ -54,6 +54,55 @@
 		</div>
 	</div>
 
+	<!-- View Recommendation Modal -->
+	<div id="viewRecModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Recommendations</h4>
+						<h4 class="modal-title modalTitle" id="recHead"></h4>
+					</div>
+					<div class="modal-body">
+						<table class="table searchableTable" id="toBeRecTable">
+							<thead>
+								<tr>
+									<th id = "fTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "tobeRecList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="recTable">
+							<thead>
+								<tr>
+									<th id = "tTF" value = 1>Time Taken</th>
+									<th value = 1>Taken By</th>
+								</tr>
+							</thead>
+							<tbody id = "recommendationList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="roomRecTable">
+							<thead>
+								<tr>
+									<th id = "rTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "roomRecList">
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<div class="container">
 		<!-- ----------FIRST ROW---------- -->
 		<div class="row" id="firstRow">
@@ -103,6 +152,7 @@
 
 						</select>
 					</p>
+					<button id = "recBtn" class="button" style="margin-top: 15px;">Recommendations</button>
 					<span style = "color:red" id = "inputWarning"></span>
 					<button id = "editBtn" class="button" style="margin-top: 15px;">Edit</button>
 				</div>
