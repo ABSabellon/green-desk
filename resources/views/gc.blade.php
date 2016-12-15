@@ -110,7 +110,7 @@
 							<thead>
 								<tr>
 									<th class = "header_sort" id = "tTF" value = 1>Time Taken</th>
-									<th class = "header_sort" id = "profname_sort" value = 1>Taken By</th>
+									<th class = "header_sort" id = "tKB" value = 1>Taken By</th>
 								</tr>
 							</thead>
 							<tbody id = "recommendationList">
