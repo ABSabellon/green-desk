@@ -31,6 +31,199 @@
 </head>
 <body>
 
+	<!-- Add Prof Modal -->
+	<div id="addProfModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Add Prof Modal content-->
+			<div class="modal-content">
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Add Professor</h4>
+					</div>
+					<div class="modal-body">
+						<ul>
+							<li><textarea id = "firstName" class="profText" placeholder="First Name" ></textarea></li>
+							<li><textarea id = "lastName" class="profText" placeholder="Last Name" ></textarea></li>
+							<li>
+								<label for = "typeOp">Type:</label>
+								<div id = "typeOp">
+									<form id = "typeForm">
+										<label class="radio-inline"><input type="radio" name="optradio" value = "Full Time">Full Time</label>
+										<label class="radio-inline"><input type="radio" name="optradio" value = "Part Time">Part Time</label>
+									</form>
+								</div>
+							</li>
+							<li><label for="collegeSelect">College:
+								<select class = "form-control" id = "collegeSelect">
+									<option>CCS</option>
+									<option>GCOE</option>
+									<option>COS</option>
+									<option>RVCOB</option>
+									<option>CLA</option>
+									<option>COED</option>
+									<option>SOE</option>
+								</select>
+							</li>
+							<li>
+								<label for = "typeOp">Base:</label>
+								<div id = "typeOp">
+									<form id = "baseForm">
+										<label class="radio-inline"><input type="radio" name="optradio" value = "Manila">Manila</label>
+										<label class="radio-inline"><input type="radio" name="optradio" value = "STC">STC</label>
+									</form>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default button" id="doneBtn">Done</button>
+						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- View Recommendation Modal -->
+	<div id="viewRecModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Recommendations</h4>
+						<h4 class="modal-title modalTitle" id="recHead"></h4>
+					</div>
+					<div class="modal-body">
+						<table class="table searchableTable" id="toBeRecTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "fTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "tobeRecList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="recTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "tTF" value = 1>Time Taken</th>
+									<th class = "header_sort" id = "profname_sort" value = 1>Taken By</th>
+								</tr>
+							</thead>
+							<tbody id = "recommendationList">
+							</tbody>
+						</table>
+						<table class="table searchableTable" id="roomRecTable">
+							<thead>
+								<tr>
+									<th class = "header_sort" id = "rTF" value = 1></th>
+								</tr>
+							</thead>
+							<tbody id = "roomRecList">
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- View Prof Modal -->
+	<div id="viewProfModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- View Prof Modal content-->
+			<div class="modal-content">	
+				<div id="reservation">
+					<div class="modal-header modalHeadStyle">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title modalTitle">Professor List</h4>
+					</div>
+					<div class="modal-body" id = "profTable">
+						<table id = "profTbl" class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Firstname</th>
+									<th>Lastname</th>
+									<th>Type</th>
+									<th>College</th>
+									<th>Base</th>
+									<th>Active</th>
+									<th>&nbsp</th>
+								</tr>
+							</thead>
+							<tbody id = "profList">
+
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-block button" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Import Prof Modal -->
+ 	<div id="importModal" class="modal fade" role="dialog">
+ 		<div class="modal-dialog">
+ 			<!-- View Prof Modal content-->
+ 			<div class="modal-content">
+ 				<div id="reservation">
+ 					{!! Form::open(array('url'=>route('import'),'method'=>'POST', 'files'=>true))!!}
+ 					 	{{ csrf_field() }}
+ 						<div class="modal-header modalHeadStyle">
+ 							<button type="button" class="close" data-dismiss="modal">&times;</button>
+ 							<h4 class="modal-title modalTitle">Import</h4>
+ 						</div>
+ 						<div class="modal-body">
+ 							<input type="file" name="importfile" required="true" />
+ 						</div>
+ 						<div class="modal-footer">
+ 							<button type="submit" class="btn btn-block button">Import</button>
+ 							<button type="button" class="btn btn-block button" data-dismiss="modal">Close</button>
+ 						</div>
+ 					{!! Form::close() !!}
+ 				</div>
+ 			</div>
+ 
+ 		</div>
+ 	</div>
+
+ 	<!-- Import Prof Modal -->
+ 	<div id="importProfModal" class="modal fade" role="dialog">
+ 		<div class="modal-dialog">
+ 			<!-- View Prof Modal content-->
+ 			<div class="modal-content">
+ 				<div id="reservation">
+ 					{!! Form::open(array('url'=>route('professor.import'),'method'=>'POST', 'files'=>true))!!}
+ 					 	{{ csrf_field() }}
+ 						<div class="modal-header modalHeadStyle">
+ 							<button type="button" class="close" data-dismiss="modal">&times;</button>
+ 							<h4 class="modal-title modalTitle">Import Professors</h4>
+ 						</div>
+ 						<div class="modal-body">
+ 							<input type="file" name="importfile" required="true" />
+ 						</div>
+ 						<div class="modal-footer">
+ 							<button type="submit" class="btn btn-block button">Import</button>
+ 							<button type="button" class="btn btn-block button" data-dismiss="modal">Close</button>
+ 						</div>
+ 					{!! Form::close() !!}
+ 				</div>
+ 			</div>
+ 
+ 		</div>
+ 	</div>
+
 	<!-- ----------MAIN CONTAINER----------- -->
 	<div class="container-fluid">
 		<div class="row">
@@ -112,6 +305,7 @@
 		<div class="row" id="firstRow">
 			<div class = "col-xs-4">
 				<a class="btn btn-primary" id = "editprofbtn" href="{{ route('export') }}">Export</a>
+				<button type="button" class="btn btn-primary"data-toggle="modal" data-target="#importModal">Import</button>
 			</div>
 			<div class = "col-xs-8">
 				<p style = "margin-left: -40px;">
@@ -159,6 +353,9 @@
 
 
 				<div id = "schedCtrlFooter">
+					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#viewProfModal">View All Professors</button>				
+					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#addProfModal">Add New Professor</button>
+					<button type="button" class="btn btn-block buttonFooter" data-toggle="modal" data-target="#importProfModal">Import Professors</button>
 				</div>
 
 			</div>

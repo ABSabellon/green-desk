@@ -161,6 +161,15 @@ ul{
 	height: 75%;
 }
 
+#schedFCtrlBody{
+	margin-top: 1vh;
+	padding-bottom: 5px;
+	padding-left: 4px;
+	background-color: white;
+	border-radius: 5px;
+	height: 62%;
+}
+
 #schedCtrlBody > #schedCtrl_profName{
 	font-style: 'bold';
 }
@@ -179,6 +188,13 @@ ul{
 	background-color: #006535;
 	border-radius: 5px 0px 0px 5px;
 	height:600px;
+	width: 30%;
+}
+
+#schedFCtrlCol{
+	background-color: #006535;
+	border-radius: 5px 0px 0px 5px;
+	height:525px;
 	width: 30%;
 }
  

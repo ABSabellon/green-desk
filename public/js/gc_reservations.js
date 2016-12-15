@@ -121,6 +121,59 @@ $('#filterSearch').on('change', function() {
 		retrieveReservations('notnull');
 });
 
+$('#editBtn').on('click', function() {
+	checkReservation();
+})
+
+function checkReservation() {
+	var diff = (( new Date('2016-1-1 '+ $('#endTime').val())) - new Date('2016-1-1 '+$('#startTime').val())) / 1000 / 60 / 60;
+	if(diff > 1) {
+		$('#inputWarning').text('You can only reserve for a maximum of 1 hour!');
+		$('#inputWarning').show();
+	} else if(diff < 0) {
+		$('#inputWarning').text('Your start time cannot be later than your end time!');
+		$('#inputWarning').show();
+	} else if(resId == null) {
+		$('#inputWarning').text('Please choose a reservation');
+		$('#inputWarning').show();
+	} else {
+		editReservation();
+	}
+}
+
+function editReservation() {
+	console.log('edit');
+	var startTime = $('#startTime').val();
+	var endTime = $('#endTime').val();
+	var room = $('#schedCtrl_room').val();
+
+	$.ajax({
+		method: 'POST',
+		url: urlEditReservation,
+		data: {index: resId, startTime:startTime, endTime: endTime, room:room}
+	})
+	.done( function(msg) {
+		if(msg.warning != null) {
+			$('#inputWarning').text(msg.warning);
+			$('#inputWarning').show();
+		} else {
+			$('#inputWarning').hide();
+		}
+		retrieveReservations(null);
+	});
+}
+
+var filter = $('#filterSearch').val();
+
+$('#filterSearch').on('change', function() {
+	filter = $('#filterSearch').val();
+	$('#searchRes').val('');
+	if(filter == '0')
+		retrieveReservations(null);
+	else
+		retrieveReservations('notnull');
+});
+
 
 $('#recBtn').on('click', function() {
 	retrieveRecRooms(null);
