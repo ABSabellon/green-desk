@@ -93,10 +93,13 @@ class GCController extends Controller
         $path = public_path() . '/export.csv';
         $out = fopen($path, 'w');
         fputcsv($out, $data->headers);
-
+        $counter = 1;
         foreach($data->get()->toArray() as $line)
         {
-            fputcsv($out, (array) $line);
+            $x = (array) $line;
+            array_unshift($x, $counter);
+            fputcsv($out, $x);
+            $counter++;
         }
         fclose($out);
 
