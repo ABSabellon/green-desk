@@ -121,6 +121,7 @@ $('#filterSearch').on('change', function() {
 		retrieveReservations('notnull');
 });
 
+<<<<<<< HEAD
 $('#searchRes').keyup(function(event) {
 	searchResTerm = event.target.value;
 	searchReservations();
@@ -137,6 +138,8 @@ function searchReservations() {
 	});
 }
 
+=======
+>>>>>>> 71d1fcfce6ed31554e2fac9dfd75a19346fd59af
 
 $('#recBtn').on('click', function() {
 	checkRecommendation();
@@ -203,65 +206,121 @@ function forRoom(reservations, room){
 				k = 1;
 			}
 		}
-	}
+	}	
 
 	var table1 = $('#toBeRecTable > tbody');
+	var table2 = $('#recTable > tbody');
 	if(x == 0){
 		toAppend = '<tr><td>24:01:00 - 24:00:0</td></tr>';
 		table1.append(toAppend);
 	}
 	else{
 		for (var i = 0; i < resArr.length; i++) {
+			// if(i < resArr.length-1){
+			// 	var diff = (( new Date('2016-1-1 '+ resArr[i+1][3])) - new Date('2016-1-1 '+ resArr[i][4])) / 1000 / 60 / 60;
+			// 	console.log("from "+ resArr[i+1][3] +" to "+resArr[i][4]+" is "+diff);
+			// 	var the10Min = 0.166;
+			// 	var the5Min = 0.1;
+			// }
+
 			if(resArr.length == 1){
-				if(resArr[i][3] == '24:01:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 24:00:00</td></tr>';
+				if(resArr[i][3] == '7:00:00'){
+					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
 					table1.append(toAppend);
 				}
-				else if(resArr[i][4] == '24:00:00'){
+				else if(resArr[i][4] == '14:00:00'){
 					toAppend = '<tr><td>24:01:00 - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
 				}
 				else{
-					toAppend = '<tr><td>24:01:00 - '+resArr[i][3]+'</td></tr>';
+					toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
-					toAppend = '<tr><td>'+resArr[i][4]+' - 23:59:59</td></tr>';
+					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
 					table1.append(toAppend);
 				}
 			}else{
 				if(i == 0){
-					if(resArr[i][3] == '24:01:00'){
+					if(resArr[i][3] == '7:00:00'){
 						toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
 						table1.append(toAppend);
 					}
-					else if(resArr[i][3] != '24:01:00'){
-						toAppend = '<tr><td>24:01:00 - '+resArr[i][3]+'</td></tr>';
+					else if(resArr[i][3] != '7:00:00'){
+						toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
 						table1.append(toAppend);
-						toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
-						table1.append(toAppend);
+
+						var diff = (( new Date('2016-1-1 '+ resArr[i+1][3])) - new Date('2016-1-1 '+ resArr[i][4])) / 1000 / 60 / 60;
+						
+						if(diff > 0.09){
+							toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+							table1.append(toAppend);
+						}
+
+						// toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+						// table1.append(toAppend);
 					}
 				}
 				if(i > 0 && i < resArr.length-1){
-					toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
-					console.log(+resArr[i][3]+' - '+resArr[i+1][4]);
-					table1.append(toAppend);
+
+					var diff = (( new Date('2016-1-1 '+ resArr[i+1][3])) - new Date('2016-1-1 '+ resArr[i][4])) / 1000 / 60 / 60;
+						
+					if(diff > 0.09){
+						toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+						table1.append(toAppend);
+					}
+
+					// toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
+					// table1.append(toAppend);
 				}
-				if(i == resArr.length-1 && resArr[i][4] != '24:00:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 24:00:00</td></tr>';
+				if(i == resArr.length-1 && resArr[i][4] != '14:00:00'){
+					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
 					table1.append(toAppend);
 				}
 				
 			}
+			var reserveeName = resArr[i][0] +', '+ resArr[i][1] +' '+ resArr[i][2];
+			toAppend = '<tr><td class = "restime"><time datetime="' +resArr[i][3]+ '">' +resArr[i][3]+ '</time>-<time datetime="' +resArr[i][4]+ '">' +resArr[i][4]+ '</time></td><td>'+reserveeName+'<td></tr>'
+			table2.append(toAppend);
+			
 		}
+		// for (var i = 0; i < reservations.length; i++) {
+		// 		var reserveeName = resArr[i][0] +', '+ resArr[i][1] +' '+ resArr[i][2];
+		// 		toAppend = '<tr><td class = "restime"><time datetime="' +resArr[i][3]+ '">' +resArr[i][3]+ '</time>-<time datetime="' +resArr[i][4]+ '">' +resArr[i][4]+ '</time></td><td>'+reserveeName+'<td></tr>'
+		// 		table2.append(toAppend);
+		// }
 
-		var table2 = $('#recTable > tbody');
-		for (var i = 0; i < reservations.length; i++) {
-			if(resArr[i][5] == room) {
-				var reserveeName = resArr[i][0] +', '+ resArr[i][1] +' '+ resArr[i][2];
-				toAppend = '<tr><td class = "restime"><time datetime="' +resArr[i][3]+ '">' +resArr[i][3]+ '</time>-<time datetime="' +resArr[i][4]+ '">' +resArr[i][4]+ '</time></td><td>'+reserveeName+'<td></tr>'
-				table2.append(toAppend);
+	}
+}
+
+// function(reservations){
+
+// }
+
+function forTime(reservations, room, sT, eT){
+	var table3 = $('#roomRecTable > tbody');
+
+	// reservations = roomFilter(reservation);
+	var rejected = new Array(reservation.length);
+	for(a = 0, b = 0; a < reservations.length; a++){
+		if(reservations[a].room_no != room){
+			if((reservations[a].time_start < sT || reservations[a].time_end < sT) || (reservations[a].time_start > eT || reservations[a].time_end > eT)){
+				var go = true;
+				for(c = 0; c < rejected.length; c++){
+					if(rejected[c] == null){
+						go = true;
+					}
+					else if(reservations[a].room_no == rejected[c]){
+						go = false;
+					}
+				}
+				if(go == true){
+					toAppend = '<tr><td>'+reservations[a].room_no+'</td></tr>'
+					table3.append(toAppend);
+				}
+
+			}else{
+				rejected[b] = reservations[a].room_no;
+				b++;
 			}
-		}
-
 	}
 }
 
@@ -269,7 +328,18 @@ function forRoom(reservations, room){
 function refreshRecommendations(reservations, room, sT, eT) {
 	$('#recommendationList').empty();
 	$('#tobeRecList').empty();
-	
+	$('#roomRecList').empty();
+
+	if(sT == null || eT == null || sT == "" || eT == "" || sT == " " || eT == " " || sT == eT){
+		$('#inputWarning').text("Please Select a time to be recommended");
+		$('#inputWarning').show();
+		document.getElementById("roomRecTable").style.visibility="hidden";
+	}
+	else{
+		document.getElementById("roomRecTable").style.visibility="visible";
+		forTime(reservations, room, sT, eT);
+	}
+
 	forRoom(reservations, room);
 }
 
