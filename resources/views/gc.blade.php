@@ -78,7 +78,7 @@
 							<thead>
 								<tr>
 									<th id = "tTF" value = 1>Time Taken</th>
-									<th value = 1>Taken By</th>
+									<th id="tKB" value = 1>Taken By</th>
 								</tr>
 							</thead>
 							<tbody id = "recommendationList">
