@@ -121,27 +121,8 @@ $('#filterSearch').on('change', function() {
 		retrieveReservations('notnull');
 });
 
-<<<<<<< HEAD
-$('#searchRes').keyup(function(event) {
-	searchResTerm = event.target.value;
-	searchReservations();
-});
-
-function searchReservations() {
-	$.ajax({
-		method: 'GET',
-		url: urlSearchReservations,
-		data: {term:searchResTerm, filter:filter, type:'GC'}
-	})
-	.done( function(msg) {
-		refreshReservations(msg.reservations);
-	});
-}
-
-=======
->>>>>>> 71d1fcfce6ed31554e2fac9dfd75a19346fd59af
-
 $('#recBtn').on('click', function() {
+
 	checkRecommendation();
 })
 
@@ -149,22 +130,14 @@ function checkRecommendation() {
 	room = $('#schedCtrl_room').val();
 	sT = $('#startTime').val();
 	eT = $('#endTime').val();
-	if(room == null) {
-		$('#inputWarning').text('Please choose a room 1st');
-		$('#inputWarning').show();
-	}else if(sT == null || eT == null){
-		$('#inputWarning').text('Pick time first');
-		$('#inputWarning').show();
-	} else {
-		retrieveRecommendation(null, room, sT, eT);
-		$('#fTF').text('Free Time for '+ room);
-		$('#fTF').show();
-		$('#tTF').text('Time Taken for '+ room);
-		$('#tTF').show();
-		$('#rTF').text('Free Room for '+ sT+'-'+eT);
-		$('#rTF').show();
-		$('#viewRecModal').modal();
-	}
+	retrieveRecommendation(null, room, sT, eT);
+	$('#fTF').text('Free Time for '+ room);
+	$('#fTF').show();
+	$('#tTF').text('Time Taken for '+ room);
+	$('#tTF').show();
+	$('#rTF').text('Free Room for '+ sT+'-'+eT);
+	$('#rTF').show();
+	$('#viewRecModal').modal();
 }
 
 function retrieveRecommendation(filter, room, sT, eT) {
@@ -206,12 +179,13 @@ function forRoom(reservations, room){
 				k = 1;
 			}
 		}
-	}	
+	}
+	
 
 	var table1 = $('#toBeRecTable > tbody');
 	var table2 = $('#recTable > tbody');
 	if(x == 0){
-		toAppend = '<tr><td>24:01:00 - 24:00:0</td></tr>';
+		toAppend = '<tr><td>7:00:00 - 14:00:00</td></tr>';
 		table1.append(toAppend);
 	}
 	else{
@@ -277,6 +251,7 @@ function forRoom(reservations, room){
 				}
 				
 			}
+
 			var reserveeName = resArr[i][0] +', '+ resArr[i][1] +' '+ resArr[i][2];
 			toAppend = '<tr><td class = "restime"><time datetime="' +resArr[i][3]+ '">' +resArr[i][3]+ '</time>-<time datetime="' +resArr[i][4]+ '">' +resArr[i][4]+ '</time></td><td>'+reserveeName+'<td></tr>'
 			table2.append(toAppend);
@@ -321,6 +296,7 @@ function forTime(reservations, room, sT, eT){
 				rejected[b] = reservations[a].room_no;
 				b++;
 			}
+		}
 	}
 }
 
@@ -330,8 +306,13 @@ function refreshRecommendations(reservations, room, sT, eT) {
 	$('#tobeRecList').empty();
 	$('#roomRecList').empty();
 
-	if(sT == null || eT == null || sT == "" || eT == "" || sT == " " || eT == " " || sT == eT){
+	if(sT == null || eT == null || sT == "" || eT == "" || sT == " " || eT == " "){
 		$('#inputWarning').text("Please Select a time to be recommended");
+		$('#inputWarning').show();
+		document.getElementById("roomRecTable").style.visibility="hidden";
+	}
+	else if(sT == eT || sT > eT){
+		$('#inputWarning').text("Please Correct your time to be recommended");
 		$('#inputWarning').show();
 		document.getElementById("roomRecTable").style.visibility="hidden";
 	}
@@ -340,8 +321,20 @@ function refreshRecommendations(reservations, room, sT, eT) {
 		forTime(reservations, room, sT, eT);
 	}
 
-	forRoom(reservations, room);
+	if(room == null){
+		$('#inputWarning').text("Please Select a room to be recommended");
+		$('#inputWarning').show();
+		document.getElementById("toBeRecTable").style.visibility="hidden";
+		document.getElementById("recTable").style.visibility="hidden";
+	}
+	else{
+		document.getElementById("toBeRecTable").style.visibility="visible";
+		document.getElementById("recTable").style.visibility="visible";
+		forRoom(reservations, room);
+	}
+	
 }
+
 
 function acsBubbleSorting(reservations){
 	n = reservations.length;
