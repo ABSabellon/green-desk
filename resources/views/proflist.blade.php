@@ -146,6 +146,7 @@
 							<li><a href="/gradeconsultation">Grade Consultation</a></li>
 							<!-- <li><a href="/finalexams" >Finals</a></li> -->
 							<li class="active"><a href="/proflist" >Professor List</a></li>
+							<li><a href="/roomlist" >Rooms</a></li>
 						</ul> 
 					</div><!--/.nav-collapse -->
 				</div><!--/.container-fluid -->

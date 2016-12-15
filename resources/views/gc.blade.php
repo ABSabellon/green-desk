@@ -45,8 +45,8 @@
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li class="active"><a href="/gradeconsultation">Grade Consultation</a></li>
-							<li><a href="/finalexams" >Finals</a></li>
 							<li><a href="/proflist" >Professor List</a></li>
+							<li><a href="/roomlist" >Rooms</a></li>
 						</ul> 
 					</div><!--/.nav-collapse -->
 				</div><!--/.container-fluid -->

@@ -27,6 +27,10 @@ Route::get('/proflist', function () {
     return view('proflist');
 });
 
+Route::get('/roomlist', function () {
+    return view('roomlist');
+});
+
 Route::post('/add_reservation_gc', [
     'uses' => 'GCController@postAddReservation',
     'as' => 'add.reservation.gc'
@@ -65,6 +69,26 @@ Route::get('/get_rooms', [
 Route::get('/get_rooms_by_floor', [
     'uses' => 'RoomController@getRoomsByFloor',
     'as' => 'get.rooms.floor'
+]);
+
+Route::post('/add_room', [
+    'uses' => 'RoomController@postAddRoom',
+    'as' => 'add.room'
+]);
+
+Route::post('/set_active_room', [
+    'uses' => 'RoomController@postSetActiveRoom',
+    'as' => 'set.activeRoom'
+]);
+
+Route::post('/edit_room', [
+    'uses' => 'RoomController@postEditRoom',
+    'as' => 'edit.room'
+]);
+
+Route::post('/delete_room', [
+    'uses' => 'RoomController@postDeleteRoom',
+    'as' => 'delete.room'
 ]);
 
 Route::get('/search_rooms', [
