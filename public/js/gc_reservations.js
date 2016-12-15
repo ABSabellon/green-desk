@@ -70,6 +70,7 @@ function refreshReservations(reservations) {
 
 $('#editBtn').on('click', function() {
 	checkReservation();
+
 })
 
 function checkReservation() {
@@ -176,7 +177,8 @@ $('#filterSearch').on('change', function() {
 
 
 $('#recBtn').on('click', function() {
-	retrieveRecRooms(null);
+	console.log("click1");
+	// retrieveRecRooms(null);
 	checkRecommendation();
 })
 
@@ -184,6 +186,7 @@ function checkRecommendation() {
 	room = $('#schedCtrl_room').val();
 	sT = $('#startTime').val();
 	eT = $('#endTime').val();
+	console.log("click2");
 	retrieveRecommendation(null, room, sT, eT);
 }
 
@@ -195,8 +198,9 @@ function retrieveRecommendation(filter, room, sT, eT) {
 		data: {filter:filter}
 	})
 	.done( function(msg) {
+		console.log("click3");
 		reservations = acsBubbleSorting(msg.reservations);
-		treshhold = refreshRecommendations(reservations, room, sT ,eT);
+		refreshRecommendations(reservations, room, sT ,eT);
 
 	});
 }
@@ -231,24 +235,24 @@ function forRoom(reservations, room){
 	var table1 = $('#toBeRecTable > tbody');
 	var table2 = $('#recTable > tbody');
 	if(x == 0){
-		toAppend = '<tr><td>7:00:00 - 14:00:00</td></tr>';
+		toAppend = '<tr><td>7:00:00 - 16:00:00</td></tr>';
 		table1.append(toAppend);
 	}
 	else{
 		for (var i = 0; i < resArr.length; i++) {
 			if(resArr.length == 1){
 				if(resArr[i][3] == '7:00:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
+					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
 					table1.append(toAppend);
 				}
-				else if(resArr[i][4] == '14:00:00'){
-					toAppend = '<tr><td>24:01:00 - '+resArr[i][3]+'</td></tr>';
+				else if(resArr[i][4] == '16:00:00'){
+					toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
 				}
 				else{
 					toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
-					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
+					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
 					table1.append(toAppend);
 				}
 			}else{
@@ -278,8 +282,8 @@ function forRoom(reservations, room){
 						table1.append(toAppend);
 					}
 				}
-				if(i == resArr.length-1 && resArr[i][4] != '14:00:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 14:00:00</td></tr>';
+				if(i == resArr.length-1 && resArr[i][4] != '16:00:00'){
+					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
 					table1.append(toAppend);
 				}
 			}
@@ -290,12 +294,73 @@ function forRoom(reservations, room){
 	}
 }
 
-function forTime(reservations, room, sT, eT){
-	retrieveRecRooms(null, reservations, room, sT, eT);
+function retrieveRecRooms(filter, reservations, room, sT, eT){
+	$.ajax({
+		method: 'GET',
+		url: urlGetRooms,
+		data: {filter:filter}
+	})
+	.done( function(msg) {
+				console.log("Retrieve");
+		refreshRecRoomsList(msg.rooms, reservations, room, sT, eT)
+
+	});
 }
 
+function refreshRecRoomsList(rooms, reservations, room, sT, eT) {
+	var table3 = $('#roomRecTable > tbody');
+
+	// console.log(sT);
+
+	var rejected = new Array(reservations.length);
+	for(a = 0, b = 0, c = 0; a < reservations.length ; a++){
+		if(reservations[a].room_no != room && (reservations[a].room_no != null || reservation[a].room_no != "" || reservation[a].room_no != " ")){
+			if((reservations[a].time_start > sT && reservations[a].time_start < eT) || (reservations[a].time_end > sT && reservations[a].time_end < eT) || (reservations[a].time_start == sT || reservations[a].time_end == eT)){
+				rejected[c] = reservations[a].room_no;
+				c++;	
+			}
+		}
+	}
+
+	accepted = [];
+	for(a = 0; a < rooms.length; a++){
+		accepted[a] = rooms[a].room_no;
+	}
+
+	var diff = arr_diff (rejected, accepted);
+
+    for(a = 0; a < diff.length; a++){
+    	if(diff[a] != "undefined"){
+	    	toAppend = '<tr><td>'+diff[a]+'</td></tr>'
+			table3.append(toAppend);
+		}
+    }
+}
+function arr_diff (a1, a2) {
+
+    var a = [], diff = [];
+
+    for (var i = 0; i < a1.length; i++) {
+        a[a1[i]] = true;
+    }
+
+    for (var i = 0; i < a2.length; i++) {
+        if (a[a2[i]]) {
+            delete a[a2[i]];
+        } else {
+            a[a2[i]] = true;
+        }
+    }
+
+    for (var k in a) {
+        diff.push(k);
+    }
+
+    return diff;
+};
 
 function refreshRecommendations(reservations, room, sT, eT) {
+	console.log("click5");
 	$('#recommendationList').empty();
 	$('#tobeRecList').empty();
 	$('#roomRecList').empty();
@@ -304,16 +369,19 @@ function refreshRecommendations(reservations, room, sT, eT) {
 		$('#rTF').text('Correct time selected');
 		$('#rTF').show();
 		treshhold +=1;
+		console.log("null");
 	}
 	else if(sT == eT || sT > eT){
 		$('#rTF').text('Correct time selected');
 		$('#rTF').show();
 		treshhold +=1;
+		console.log("incorrect");
 	}
 	else{
 		$('#rTF').text('Free Room for '+ sT+'-'+eT);
 		$('#rTF').show();
-		forTime(reservations, room, sT, eT);
+		console.log("click");
+		retrieveRecRooms(null, reservations, room, sT, eT);
 	}
 
 	if(room == null){
@@ -344,6 +412,7 @@ function refreshRecommendations(reservations, room, sT, eT) {
 }
 
 function acsBubbleSorting(reservations){
+			console.log("click4");
 	n = reservations.length;
 	for (c = 0; c < ( n - 1 ); c++) {
 		for (d = 0; d < n - c - 1; d++) {

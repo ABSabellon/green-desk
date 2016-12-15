@@ -22,68 +22,6 @@ function retrieveRooms(filter){
 // 	roomList.selectpicker('refresh');
 // }
 
-function retrieveRecRooms(filter, reservations, room, sT, eT){
-	$.ajax({
-		method: 'GET',
-		url: urlGetRooms,
-		data: {filter:filter}
-	})
-	.done( function(msg) {
-		// refreshRooms(msg.rooms)
-		refreshRecRoomsList(msg.rooms, reservations, room, sT, eT)
-
-	});
-}
-
-function refreshRecRoomsList(rooms, reservations, room, sT, eT) {
-	var table3 = $('#roomRecTable > tbody');
-	var rejected = new Array(reservations.length);
-	for(a = 0, b = 0, c = 0; a < reservations.length ; a++){
-		if(reservations[a].room_no != room && (reservations[a].room_no != null || reservation[a].room_no != "" || reservation[a].room_no != " ")){
-			if((reservations[a].time_start > sT && reservations[a].time_start < eT) || (reservations[a].time_end > sT && reservations[a].time_end < eT) || (reservations[a].time_start == sT || reservations[a].time_end == eT)){
-				rejected[c] = reservations[a].room_no;
-				c++;	
-			}
-		}
-	}
-
-	accepted = [];
-	for(a = 0; a < rooms.length; a++){
-		accepted[a] = rooms[a].room_no;
-	}
-
-	var diff = arr_diff (rejected, accepted);
-
-    for(a = 0; a < diff.length; a++){
-    	if(diff[a] != "undefined"){
-	    	toAppend = '<tr><td>'+diff[a]+'</td></tr>'
-			table3.append(toAppend);
-		}
-    }
-}
-function arr_diff (a1, a2) {
-
-    var a = [], diff = [];
-
-    for (var i = 0; i < a1.length; i++) {
-        a[a1[i]] = true;
-    }
-
-    for (var i = 0; i < a2.length; i++) {
-        if (a[a2[i]]) {
-            delete a[a2[i]];
-        } else {
-            a[a2[i]] = true;
-        }
-    }
-
-    for (var k in a) {
-        diff.push(k);
-    }
-
-    return diff;
-};
-
 function refreshRoomsList(rooms) {
 	$('#roomList').empty();
 	var table = $('#roomTbl > tbody');
