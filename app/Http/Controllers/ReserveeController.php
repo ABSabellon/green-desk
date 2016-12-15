@@ -105,6 +105,11 @@ class ReserveeController extends Controller
                 $reservee->save();
             }
         }
+<<<<<<< HEAD
         return redirect('/professorlist');
     }
+=======
+
+        return redirect('/gradeconsultation');
+>>>>>>> new-project-with
 }

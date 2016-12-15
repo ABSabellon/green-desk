@@ -142,4 +142,5 @@ Route::get('/get_takers', [
 ]);
 
 Route::get('/export', ['uses' => 'GCController@export', 'as' => 'export']);
+Route::post('/import', ['uses' => 'GCController@import', 'as' => 'import']);
 Route::post('/professor/import', ['uses' => 'ReserveeController@import', 'as' => 'professor.import']);

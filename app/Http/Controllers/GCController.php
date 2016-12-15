@@ -89,16 +89,72 @@ class GCController extends Controller
     }
 
     public function export(){
-        $data = Reservation::whereNull('exam_id')->get()->toArray();
+        $data = Reservation::getReservationsTable();
         $path = public_path() . '/export.csv';
         $out = fopen($path, 'w');
-        fputcsv($out, array_keys($data[1]));
-        foreach($data as $line)
+        fputcsv($out, $data->headers);
+
+        foreach($data->get()->toArray() as $line)
         {
-            fputcsv($out, $line);
+            fputcsv($out, (array) $line);
         }
         fclose($out);
 
         return response()->download($path);
+    }
+
+    public function import(Request $request){
+        $file = $request->file('importfile')->move(public_path(), 'import.csv');
+        $contents = $file = fopen(public_path(). '\import.csv', 'r');
+        $header = null;
+        $err = null;
+        while (($line = fgetcsv($contents)) !== FALSE) {
+            if($header == null) {
+                $header = $line;
+            }
+            else{
+                /*
+                0 - College
+                1 - Last Name
+                2 - First Name 
+                3 - Middle Name
+                4 - Time Start
+                5 - Time End
+                5 - Room
+                */
+                $data = new Reservation;
+                $data->time_start = $line[4];
+                $data->time_end = $line[5];
+
+                $reservee = Reservee::getReserveeWithName($line[1], $line[2], $line[3])->get();
+                /*dd(count(Reservee::getReserveeWithName('a','b','c')->get()));*/
+                if(count($reservee) > 0){
+                    $data->reservee_id = $reservee[0]->id;
+                }
+                else {
+                    $err = "Prof with id:" . $data->reservee_id . " does not exist";
+                }
+                
+                $room = Room::getRoomId($line[6])->get();
+                
+                if(count($room) > 0){
+                    $data->room_id = $room[0]->id;
+                }
+                else {
+                    $err = "Prof with id:" . $data->reservee_id . " does not exist";
+                }               
+                
+                if($err == null){
+                    $data->save();
+                }
+            }
+        }
+
+        if($err){
+            return redirect('/gradeconsultation');
+        }
+        else{
+            return $err;
+        }
     }
 }

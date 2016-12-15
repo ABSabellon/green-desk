@@ -135,7 +135,7 @@
 		<!-- ----------THIRD ROW---------- -->
 		<div class="row" id="thirdRow">
 			<!-- ----------SCHED TABLE CONTROL PANEL COL---------- -->
-			<div class="col-xs-3" id = "schedCtrlCol">
+			<div class="col-xs-3" id = "schedFCtrlCol">
 			
 				<div id = "schedCtrlHeader">
 					<p>
@@ -143,7 +143,7 @@
 					</p>
 				</div>
 				
-				<div id = "schedCtrlBody">
+				<div id = "schedFCtrlBody">
 					<p id = "schedCtrl_subject">Subject: <span></span></p>
 					<p id = "schedCtrl_section">Section: <span></span></p>
 					<p id = "schedCtrl_takers">Takers: <span></span></p>
