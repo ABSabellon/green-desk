@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventTable extends Migration
+class CreateSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('events', function (Blueprint $table) {
+        //
+        Schema::create('subjects', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
-            $table->string('type', 100);
-            $table->time('min_time');
-            $table->time('max_time');
+            $table->string('subject', 10);
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateEventTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('subjects');
     }
 }

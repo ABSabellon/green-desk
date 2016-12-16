@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Reservee;
 use App\Reservation;
 use Illuminate\Http\Request;
-use File;
 
 class ReserveeController extends Controller
 {
@@ -22,18 +21,25 @@ class ReserveeController extends Controller
     	$reservee->professor_base = $request['profBase'];
         $reservee->is_active = 1;
 
-    	$reservee->save();
+        $reservee->save();
 
-    	$reservation = new Reservation();
+        $reservation = new Reservation();
 
-    	$reservation->reservee_id = $reservee->id;
+        $reservation->reservee_id = $reservee->id;
 
-    	$reservation->save();
+        $reservation->save();
     }
 
     public function getProfessors(Request $request) {
     	$reservees = Reservee::all();
     	
+        // foreach ($reservees as $reservee) {
+        //     if(Reservation::where('reservee_id', $reservee->id)->first() == null) {
+        //         $reservation = new Reservation();
+        //         $reservation->reservee_id = $reservee->id;
+        //         $reservation->save();
+        //     }
+        // }
 
         return response()->json(['reservees' => $reservees], 200);
     }
@@ -52,11 +58,31 @@ class ReserveeController extends Controller
         $prof->save();
     }
 
+    public function postDeleteProfessor(Request $request) {
+        $id = $request['id'];
+        $prof = Reservee::find($id);    
+        $prof->forceDelete();
+    }
+
+    public function postEditProfessor(Request $request) {
+        $reservee = Reservee::find($request['id']);
+
+        $reservee->first_name = $request['firstname'];
+        $reservee->middle_name = $request['middlename'];
+        $reservee->last_name = $request['lastname'];
+
+        $reservee->professor_status = $request['status'];
+        $reservee->professor_college = $request['college'];
+        $reservee->professor_base = $request['base'];
+
+
+        $reservee->save();
+    }
+
     public function import(Request $request){
         $file = $request->file('importfile')->move(public_path(), 'import.csv');
         $contents = $file = fopen(public_path(). '\import.csv', 'r');
         $header = null;
-
         while (($line = fgetcsv($contents)) !== FALSE) {
             if($header == null) {
                 $header = $line;
@@ -72,12 +98,18 @@ class ReserveeController extends Controller
                 $reservee->first_name = $line[1];
                 $reservee->last_name = $line[0];
                 $reservee->middle_name = $line[2];
-                $reservee->reservee_type = $line[3];
+                $reservee->professor_status = $line[3];
                 $reservee->professor_college = $line[4];
                 $reservee->professor_base = $line[5];
+                $reservee->reservee_type = 'Professor';
                 $reservee->save();
             }
         }
+<<<<<<< HEAD
+        return redirect('/professorlist');
+    }
+=======
 
         return redirect('/gradeconsultation');
+>>>>>>> new-project-with
 }
