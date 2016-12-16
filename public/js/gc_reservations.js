@@ -234,35 +234,37 @@ function forRoom(reservations, room){
 	
 	var table1 = $('#toBeRecTable > tbody');
 	var table2 = $('#recTable > tbody');
+	var startAll = "7:00:00";
+	var endAll = "18:00:00";
 	if(x == 0){
-		toAppend = '<tr><td>7:00:00 - 16:00:00</td></tr>';
+		toAppend = '<tr><td>'+startAll+' - '+endAll+'</td></tr>';
 		table1.append(toAppend);
 	}
 	else{
 		for (var i = 0; i < resArr.length; i++) {
 			if(resArr.length == 1){
-				if(resArr[i][3] == '7:00:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
+				if(resArr[i][3] == startAll){
+					toAppend = '<tr><td>'+resArr[i][4]+' - '+endAll+'</td></tr>';
 					table1.append(toAppend);
 				}
-				else if(resArr[i][4] == '16:00:00'){
-					toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
+				else if(resArr[i][4] == endAll){
+					toAppend = '<tr><td>'+startAll+' - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
 				}
 				else{
-					toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
+					toAppend = '<tr><td>'+startAll+' - '+resArr[i][3]+'</td></tr>';
 					table1.append(toAppend);
-					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
+					toAppend = '<tr><td>'+resArr[i][4]+' - '+endAll+'</td></tr>';
 					table1.append(toAppend);
 				}
 			}else{
 				if(i == 0){
-					if(resArr[i][3] == '7:00:00'){
+					if(resArr[i][3] == startAll){
 						toAppend = '<tr><td>'+resArr[i][4]+' - '+resArr[i+1][3]+'</td></tr>';
 						table1.append(toAppend);
 					}
-					else if(resArr[i][3] != '7:00:00'){
-						toAppend = '<tr><td>7:00:00 - '+resArr[i][3]+'</td></tr>';
+					else if(resArr[i][3] != startAll){
+						toAppend = '<tr><td>'startAll' - '+resArr[i][3]+'</td></tr>';
 						table1.append(toAppend);
 
 						var diff = (( new Date('2016-1-1 '+ resArr[i+1][3])) - new Date('2016-1-1 '+ resArr[i][4])) / 1000 / 60 / 60;
@@ -282,8 +284,8 @@ function forRoom(reservations, room){
 						table1.append(toAppend);
 					}
 				}
-				if(i == resArr.length-1 && resArr[i][4] != '16:00:00'){
-					toAppend = '<tr><td>'+resArr[i][4]+' - 16:00:00</td></tr>';
+				if(i == resArr.length-1 && resArr[i][4] != endAll){
+					toAppend = '<tr><td>'+resArr[i][4]+' - '+endAll+'</td></tr>';
 					table1.append(toAppend);
 				}
 			}
